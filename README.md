@@ -119,3 +119,7 @@ The optional public-data check is `uv run --with duckdb==2.0.0 python scripts/ru
 ## Support
 
 Source and issues are hosted in [Query-farm/vgi-earth-observation](https://github.com/Query-farm/vgi-earth-observation). This is a library worker, not a hosted service; publishing source does not deploy an endpoint. Keep reports tied to the input CRS, resource limits and reproducible SQL. See [LICENSE](LICENSE) for the starter's license and dependency licenses for their terms.
+
+## Executed notebook
+
+[Coverage controls comparisons](notebooks/README.md) uses the packaged synthetic optical fixtures to distinguish missing data, partial coverage, monthly composites and eligible index changes.
