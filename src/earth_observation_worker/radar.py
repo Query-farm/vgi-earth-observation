@@ -256,6 +256,21 @@ RADAR_SQL = (
     "ORDER BY observed_at"
 )
 
+# Composed: radar follow-up restricted to parcels whose optical history shows a decline.
+RADAR_FOLLOWUP_SQL = (
+    "WITH declined AS (SELECT DISTINCT parcel_id FROM earth_observation.main.parcel_series("
+    "(SELECT parcel_id, geometry_wkb FROM earth_observation.main.demo_input)) WHERE decline) "
+    "SELECT region_id, observed_at::DATE AS observed_date, relative_orbit, "
+    "round(max(mean_db) FILTER (WHERE polarization = 'VV') - max(mean_db) FILTER (WHERE polarization = 'VH'), 1) "
+    "AS vv_minus_vh_db FROM earth_observation.main.radar_series((SELECT parcel_id AS region_id, geometry_wkb "
+    "FROM earth_observation.main.demo_input WHERE parcel_id IN (SELECT parcel_id FROM declined))) "
+    "WHERE status = 'ok' GROUP BY region_id, observed_at, relative_orbit ORDER BY region_id, observed_at"
+)
+RADAR_FOLLOWUP_DESCRIPTION = (
+    "Follow up parcels flagged with an optical NDVI decline: VV minus VH backscatter in dB "
+    "for each fully covered radar acquisition"
+)
+
 
 class RadarSeries(TableInOutGenerator[RadarArgs]):
     """Expose prepared SAR region histories as SQL rows without inferring damage."""
@@ -271,8 +286,23 @@ class RadarSeries(TableInOutGenerator[RadarArgs]):
             RADAR_RESULT,
             RADAR_SQL,
             [["2025-08-10", -10.0, "ok"], ["2025-08-22", -20.0, "ok"], ["2025-09-03", None, "insufficient_coverage"]],
+            more=[
+                (
+                    RADAR_FOLLOWUP_DESCRIPTION,
+                    RADAR_FOLLOWUP_SQL,
+                    [
+                        ["field-a", "2025-08-10", 77, 10.0],
+                        ["field-a", "2025-08-22", 77, 10.0],
+                        ["field-b", "2025-08-10", 77, 10.0],
+                        ["field-b", "2025-08-22", 77, 10.0],
+                    ],
+                )
+            ],
         )
-        examples = example(RADAR_SQL, "Inspect a synthetic radar-return decrease and an explicit missing observation")
+        examples = [
+            *example(RADAR_SQL, "Inspect a synthetic radar-return decrease and an explicit missing observation"),
+            *example(RADAR_FOLLOWUP_SQL, RADAR_FOLLOWUP_DESCRIPTION),
+        ]
 
     @classmethod
     def on_bind(cls, params: BindParams[RadarArgs]) -> BindResponse:

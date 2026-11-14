@@ -111,8 +111,29 @@ def sql_type(kind: pa.DataType) -> str:
     return "VARCHAR"
 
 
-def metadata(title: str, description: str, schema: pa.Schema, sql: str, expected: list[list[Any]]) -> dict[str, str]:
-    """Publish complete GIS function docs and a deterministic SQL acceptance example."""
+def metadata(
+    title: str,
+    description: str,
+    schema: pa.Schema,
+    sql: str,
+    expected: list[list[Any]],
+    *,
+    more: Iterable[tuple[str, str, list[list[Any]]]] = (),
+) -> dict[str, str]:
+    """Publish complete GIS function docs and deterministic SQL acceptance examples.
+
+    Args:
+        title: Human-readable object title.
+        description: Object documentation for agents and people.
+        schema: Result schema whose column comments are published.
+        sql: The primary offline example.
+        expected: Rows ``sql`` returns on the bundled synthetic data.
+        more: Extra ``(description, sql, expected rows)`` offline examples.
+
+    Returns:
+        The object's discovery tags.
+
+    """
     return {
         **object_tags(
             title=title,
@@ -132,7 +153,10 @@ def metadata(title: str, description: str, schema: pa.Schema, sql: str, expected
             ]
         ),
         "vgi.executable_examples": json.dumps(
-            [{"description": title + " on bundled synthetic data", "sql": sql, "expected_result": expected}]
+            [
+                {"description": title + " on bundled synthetic data", "sql": sql, "expected_result": expected},
+                *({"description": d, "sql": q, "expected_result": rows} for d, q, rows in more),
+            ]
         ),
     }
 

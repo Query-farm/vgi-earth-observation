@@ -135,11 +135,19 @@ AGENT_TEST_TASKS.extend(
             "prompt": "Inspect the synthetic VV radar history for field-a using the radar_series function. "
             "Return observed_date, rounded mean_db and status, ordered by acquisition as in its catalog example.",
         },
+        {
+            "name": "gis_optical_radar_drop",
+            "prompt": "Using the bundled synthetic parcels, which parcels have both an optical NDVI decline and a "
+            "VV radar backscatter drop of at least 5 dB between consecutive fully covered (status 'ok') "
+            "acquisitions on the same orbit track? Return two columns: parcel_id (VARCHAR) and "
+            "largest_vv_drop_db (DOUBLE, the largest such drop as a positive dB value rounded to 1 decimal), "
+            "ordered by parcel_id.",
+        },
     ]
 )
 
 CATALOG_TAGS = {
-    "vgi.title": "Earth Observation",
+    "vgi.title": "Earth Observation Time Series",
     "vgi.subtitle": "Example DuckDB functions to rename and replace: a scalar, a table function and a REST API reader.",
     "vgi.doc_llm": CATALOG_DOC_LLM,
     "vgi.doc_md": CATALOG_DOC_MD,

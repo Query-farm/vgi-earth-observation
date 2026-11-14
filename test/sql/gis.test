@@ -67,3 +67,19 @@ statement error
 SELECT * FROM earth_observation.main.parcel_series((SELECT * FROM earth_observation.main.demo_input), start_date := '2027-01-01', end_date := '2026-01-01');
 ----
 start_date
+
+# Composed: optical declines joined to the VV change per orbit track (parcel_series + radar_series).
+query TIRITR
+WITH optical AS (SELECT parcel_id, count(*) FILTER (WHERE decline) AS ndvi_declines, min(delta_index) AS worst_ndvi_change FROM earth_observation.main.parcel_series((SELECT parcel_id, geometry_wkb FROM earth_observation.main.demo_input)) GROUP BY parcel_id), radar AS (SELECT region_id, relative_orbit, orbit_state, arg_max(mean_db, observed_at) - arg_min(mean_db, observed_at) AS vv_change_db FROM earth_observation.main.radar_series((SELECT parcel_id AS region_id, geometry_wkb FROM earth_observation.main.demo_input), polarizations := 'vv') WHERE status = 'ok' GROUP BY region_id, relative_orbit, orbit_state) SELECT o.parcel_id, o.ndvi_declines, round(o.worst_ndvi_change, 2) AS worst_ndvi_change, r.relative_orbit, r.orbit_state, round(r.vv_change_db, 1) AS vv_change_db FROM optical AS o JOIN radar AS r ON r.region_id = o.parcel_id ORDER BY o.parcel_id, r.relative_orbit, r.orbit_state;
+----
+field-a	1	-0.6	77	ascending	-10.0
+field-b	1	-0.6	77	ascending	-10.0
+
+# Composed: radar follow-up restricted to parcels with an optical decline.
+query TTIR
+WITH declined AS (SELECT DISTINCT parcel_id FROM earth_observation.main.parcel_series((SELECT parcel_id, geometry_wkb FROM earth_observation.main.demo_input)) WHERE decline) SELECT region_id, observed_at::DATE AS observed_date, relative_orbit, round(max(mean_db) FILTER (WHERE polarization = 'VV') - max(mean_db) FILTER (WHERE polarization = 'VH'), 1) AS vv_minus_vh_db FROM earth_observation.main.radar_series((SELECT parcel_id AS region_id, geometry_wkb FROM earth_observation.main.demo_input WHERE parcel_id IN (SELECT parcel_id FROM declined))) WHERE status = 'ok' GROUP BY region_id, observed_at, relative_orbit ORDER BY region_id, observed_at;
+----
+field-a	2025-08-10	77	10.0
+field-a	2025-08-22	77	10.0
+field-b	2025-08-10	77	10.0
+field-b	2025-08-22	77	10.0

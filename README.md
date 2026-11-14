@@ -100,6 +100,38 @@ ORDER BY parcel_id, observed_at;
 
 WKB is an ordinary SQL BLOB with an explicit companion CRS, not an automatically transformed geometry. Use `ST_AsWKB` on input and `ST_GeomFromWKB` on output when using Spatial. Coordinates always use X/Y order. Do not join different coordinate systems without transforming them. Input IDs are retained as VARCHAR for joins. Invalid input schemas, geometries, coordinates and exceeded resource limits fail explicitly.
 
+### Optical and radar together
+
+Both functions keep the caller's IDs, so their histories join per parcel. This
+offline query counts each bundled parcel's optical NDVI declines and joins them
+to the VV backscatter change between the first and last fully covered radar
+acquisitions on each orbit track:
+
+```sql
+WITH optical AS (
+    SELECT parcel_id, count(*) FILTER (WHERE decline) AS ndvi_declines,
+           min(delta_index) AS worst_ndvi_change
+    FROM earth_observation.main.parcel_series(
+        (SELECT parcel_id, geometry_wkb FROM earth_observation.main.demo_input))
+    GROUP BY parcel_id),
+radar AS (
+    SELECT region_id, relative_orbit, orbit_state,
+           arg_max(mean_db, observed_at) - arg_min(mean_db, observed_at) AS vv_change_db
+    FROM earth_observation.main.radar_series(
+        (SELECT parcel_id AS region_id, geometry_wkb FROM earth_observation.main.demo_input),
+        polarizations := 'vv')
+    WHERE status = 'ok'
+    GROUP BY region_id, relative_orbit, orbit_state)
+SELECT o.parcel_id, o.ndvi_declines, round(o.worst_ndvi_change, 2) AS worst_ndvi_change,
+       r.relative_orbit, r.orbit_state, round(r.vv_change_db, 1) AS vv_change_db
+FROM optical AS o JOIN radar AS r ON r.region_id = o.parcel_id
+ORDER BY o.parcel_id, r.relative_orbit, r.orbit_state;
+```
+
+Each synthetic parcel has one NDVI decline (-0.6) and a -10 dB VV change on
+ascending orbit 77. The synthetic optical and radar scenes are from different
+years, so this is a demonstration of the join, not evidence of one event.
+
 ## Verification and provenance
 
 - Scientific fixtures and edge cases: [tests/test_analysis.py](tests/test_analysis.py).

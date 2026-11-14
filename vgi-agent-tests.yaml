@@ -23,3 +23,13 @@ tasks:
 
   - name: gis_radar_series
     reference_sql: "SELECT observed_at::DATE AS observed_date, round(mean_db, 1), status FROM earth_observation.main.radar_series((SELECT parcel_id AS region_id, geometry_wkb FROM earth_observation.main.demo_input WHERE parcel_id='field-a'), polarizations := 'vv') ORDER BY observed_at"
+
+  # Composed: optical declines (parcel_series) filter consecutive VV drops (radar_series).
+  - name: gis_optical_radar_drop
+    reference_sql: >-
+      WITH vv AS (SELECT region_id, mean_db - lag(mean_db) OVER (PARTITION BY region_id, platform, relative_orbit, orbit_state ORDER BY observed_at) AS step_db
+      FROM earth_observation.main.radar_series((SELECT parcel_id AS region_id, geometry_wkb FROM earth_observation.main.demo_input), polarizations := 'vv')
+      WHERE status = 'ok')
+      SELECT region_id AS parcel_id, round(-min(step_db), 1) AS largest_vv_drop_db FROM vv
+      WHERE region_id IN (SELECT parcel_id FROM earth_observation.main.parcel_series((SELECT parcel_id, geometry_wkb FROM earth_observation.main.demo_input)) WHERE decline)
+      GROUP BY region_id HAVING -min(step_db) >= 5 ORDER BY parcel_id

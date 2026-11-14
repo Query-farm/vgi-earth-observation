@@ -627,6 +627,26 @@ SERIES_SQL = (
     "earth_observation.main.demo_input)) ORDER BY parcel_id, observed_at"
 )
 
+# Composed: optical decline counts joined to the VV backscatter change on each viewing track.
+OPTICAL_RADAR_SQL = (
+    "WITH optical AS (SELECT parcel_id, count(*) FILTER (WHERE decline) AS ndvi_declines, "
+    "min(delta_index) AS worst_ndvi_change FROM earth_observation.main.parcel_series("
+    "(SELECT parcel_id, geometry_wkb FROM earth_observation.main.demo_input)) GROUP BY parcel_id), "
+    "radar AS (SELECT region_id, relative_orbit, orbit_state, "
+    "arg_max(mean_db, observed_at) - arg_min(mean_db, observed_at) AS vv_change_db "
+    "FROM earth_observation.main.radar_series((SELECT parcel_id AS region_id, geometry_wkb "
+    "FROM earth_observation.main.demo_input), polarizations := 'vv') WHERE status = 'ok' "
+    "GROUP BY region_id, relative_orbit, orbit_state) "
+    "SELECT o.parcel_id, o.ndvi_declines, round(o.worst_ndvi_change, 2) AS worst_ndvi_change, "
+    "r.relative_orbit, r.orbit_state, round(r.vv_change_db, 1) AS vv_change_db "
+    "FROM optical AS o JOIN radar AS r ON r.region_id = o.parcel_id "
+    "ORDER BY o.parcel_id, r.relative_orbit, r.orbit_state"
+)
+OPTICAL_RADAR_DESCRIPTION = (
+    "Per parcel, join the count of optical NDVI declines and the worst NDVI change to the VV "
+    "backscatter change in dB between the first and last fully covered radar acquisitions on each orbit track"
+)
+
 
 class ParcelSeries(TableInOutGenerator[SeriesArgs]):
     """Return observation/composite rows for each input parcel."""
@@ -648,8 +668,21 @@ class ParcelSeries(TableInOutGenerator[SeriesArgs]):
             RESULT,
             SERIES_SQL,
             [["field-a", 0.6, None], ["field-a", 0.0, True], ["field-b", 0.6, None], ["field-b", 0.0, True]],
+            more=[
+                (
+                    OPTICAL_RADAR_DESCRIPTION,
+                    OPTICAL_RADAR_SQL,
+                    [
+                        ["field-a", 1, -0.6, 77, "ascending", -10.0],
+                        ["field-b", 1, -0.6, 77, "ascending", -10.0],
+                    ],
+                )
+            ],
         )
-        examples = example(SERIES_SQL, "Find vegetation declines in two synthetic parcels")
+        examples = [
+            *example(SERIES_SQL, "Find vegetation declines in two synthetic parcels"),
+            *example(OPTICAL_RADAR_SQL, OPTICAL_RADAR_DESCRIPTION),
+        ]
 
     @classmethod
     def on_bind(cls, params: BindParams[SeriesArgs]) -> BindResponse:
