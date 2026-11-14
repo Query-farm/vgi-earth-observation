@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "notebook_sha256": "9f648a00073cbaaa5eb7569af259f5e1affad4b0c3017af2d6db93ec4100e40a",
+  "catalog_sha256": "c25467397046c2f68c204f9f2b119f29ed6fd14101e952feabff6ad69be7d906",
+  "worker_revision": "77a249112bafc8ed34f0acadfce6dcb6f2d1c343",
+  "status": "success",
+  "executed_at": "2026-11-14T22:39:39.651029+00:00",
+  "engine": "Haybarn2.0.0rc11 / public EarthObservationv0.1.0 release-owned uvx Python3.13",
+  "command": "uv run --locked vgi-notebooks --timeout 300",
+  "catalog_aliases": [
+    "earth_observation"
+  ],
+  "cells": [
+    {
+      "id": "d8cc3872",
+      "status": "success",
+      "execution_count": 1,
+      "source_sha256": "c5b782bfcbc2abf6a3fd3ea447e3fe61696cb5bcbfb9fdbc319b22fa0a4948b5",
+      "outputs_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "id": "install-tools",
+      "status": "success",
+      "execution_count": 2,
+      "source_sha256": "9f1cd39950b8944b74a979e34de1fc644e88992e9bb4712f2a5a77b03b6d3048",
+      "outputs_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "id": "e1db9a97",
+      "status": "success",
+      "execution_count": 3,
+      "source_sha256": "27dab7e7e7f01887cc4136d5430fd2e40c896cdb35ed7b8a728cc520697e8f3f",
+      "outputs_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "id": "9362e41a",
+      "status": "success",
+      "execution_count": 4,
+      "source_sha256": "b2ff764149ef38845ea5605a874b2357784ff184ad48a3d70e67b07575fa8ef7",
+      "outputs_sha256": "fdb4166dc3676d819413bf960c5f84ffdcb993bd40da932946d3156a193403ba"
+    },
+    {
+      "id": "2aee943a",
+      "status": "success",
+      "execution_count": 5,
+      "source_sha256": "12595cc91e6d2087e75e5f27ab5680137374aa3c4e9fb425777ec9f94591ba6f",
+      "outputs_sha256": "3fc19a8c127862092861b45b11e0ee35ec79e783241064a70fac3360380000cb"
+    },
+    {
+      "id": "92022070",
+      "status": "success",
+      "execution_count": 6,
+      "source_sha256": "62618a4122c48fa47c86ae78afec68f4ede638640a2b7985435a534d16adb4c7",
+      "outputs_sha256": "fd5adb1dbe4492795ec2183fad28c6e3cd2f38539aac3d490c5b1464777bf5b3"
+    },
+    {
+      "id": "7d9a0590",
+      "status": "success",
+      "execution_count": 7,
+      "source_sha256": "d9aab69e08047abbc6ce6c7bdb6fd3361eb69f5d769fd337b2c1df21980a9b23",
+      "outputs_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "id": "5a1c3759",
+      "status": "success",
+      "execution_count": 8,
+      "source_sha256": "ea043c49b606769e66df427bc1aa898ec65d32d3a625985707352f496e84b93f",
+      "outputs_sha256": "ec57b163e9eccb4af0daf7c8da4c932fc77cc6e09980831a826feaa22fe690c9"
+    },
+    {
+      "id": "ddbe8073",
+      "status": "success",
+      "execution_count": 9,
+      "source_sha256": "40755f545e88fb9eff1f11adf8fd838a9756d016988db4bb2c268454998ca6bd",
+      "outputs_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "id": "a212995e",
+      "status": "success",
+      "execution_count": 10,
+      "source_sha256": "585d7e73008a0d0ff76cb076d69ec77bcbe5b18ccd1b053409175328a3bf5fd3",
+      "outputs_sha256": "4604ebcc133ce6a319b95767a6ad85493581d1341baa74afce7440c5d262bc23"
+    },
+    {
+      "id": "8d60287d",
+      "status": "success",
+      "execution_count": 11,
+      "source_sha256": "766c2aaf38a2774e92930aa3ce86e27b62cde0b806a187bf527ec04d4a63fd1e",
+      "outputs_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "id": "78b60831",
+      "status": "success",
+      "execution_count": 12,
+      "source_sha256": "ff37589063ea3df91a7ec88f6c7b9544fd9fc8fdb859363e0abd114bf2dc1109",
+      "outputs_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "id": "4f8b575f",
+      "status": "success",
+      "execution_count": 13,
+      "source_sha256": "bbd4b6a8dce491838e7e1fc052c34d28f1cbdeafcb831c3b17e85ea181fa0196",
+      "outputs_sha256": "44d7dac4fd351b6a635fd7747b17345015f79ca08804298d7771a448acd954d0"
+    },
+    {
+      "id": "e978ab75",
+      "status": "success",
+      "execution_count": 14,
+      "source_sha256": "4299db96a3b77b03e4e6443b7a42b69fce389beb28daf22600ded182bb18b667",
+      "outputs_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    }
+  ]
+}

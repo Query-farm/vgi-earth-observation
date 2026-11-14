@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "repository": "Query-farm/vgi-earth-observation",
+  "revision": "77a249112bafc8ed34f0acadfce6dcb6f2d1c343",
+  "captured_at": "2026-11-14T22:29:39.597705+00:00",
+  "default_schema": "main",
+  "scope": "all_public_functions_and_tables",
+  "complete": true,
+  "objects": [
+    {
+      "schema": "examples",
+      "name": "fetch_items",
+      "kind": "function",
+      "signatures": [
+        "fetch_items(VARCHAR, BIGINT) -> None"
+      ],
+      "authentication": "optional",
+      "access": "read"
+    },
+    {
+      "schema": "examples",
+      "name": "greet",
+      "kind": "function",
+      "signatures": [
+        "greet(VARCHAR) -> VARCHAR"
+      ],
+      "authentication": "none",
+      "access": "read"
+    },
+    {
+      "schema": "examples",
+      "name": "greet",
+      "kind": "function",
+      "signatures": [
+        "greet(VARCHAR, VARCHAR) -> VARCHAR"
+      ],
+      "authentication": "none",
+      "access": "read"
+    },
+    {
+      "schema": "examples",
+      "name": "sequence_table",
+      "kind": "function",
+      "signatures": [
+        "sequence_table(BIGINT, BIGINT) -> None"
+      ],
+      "authentication": "none",
+      "access": "read"
+    },
+    {
+      "schema": "main",
+      "name": "demo_input",
+      "kind": "function",
+      "signatures": [
+        "demo_input() -> None"
+      ],
+      "authentication": "none",
+      "access": "read"
+    },
+    {
+      "schema": "main",
+      "name": "parcel_series",
+      "kind": "function",
+      "signatures": [
+        "parcel_series(TABLE, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, DOUBLE, BIGINT, BIGINT, BIGINT, DOUBLE, DOUBLE, VARCHAR, VARCHAR, VARCHAR, BIGINT, DOUBLE, VARCHAR, VARCHAR, VARCHAR, VARCHAR, BIGINT, VARCHAR) -> None"
+      ],
+      "authentication": "none",
+      "access": "read"
+    },
+    {
+      "schema": "main",
+      "name": "radar_series",
+      "kind": "function",
+      "signatures": [
+        "radar_series(TABLE, DOUBLE, VARCHAR, VARCHAR, BIGINT, VARCHAR, BIGINT, VARCHAR, VARCHAR, VARCHAR, BIGINT, BIGINT, VARCHAR) -> None"
+      ],
+      "authentication": "none",
+      "access": "read"
+    },
+    {
+      "schema": "main",
+      "name": "demo_input",
+      "kind": "table",
+      "signatures": [
+        "TABLE"
+      ],
+      "authentication": "none",
+      "access": "read"
+    }
+  ],
+  "evidence": [
+    {
+      "path": "coverage/functions.json",
+      "sha256": "03a89fe1f9b5a6020b7dc4110ecd6cbba33ef8aac367335a6b38ef58f7137a57",
+      "description": "Complete real released runtime functions export"
+    },
+    {
+      "path": "coverage/tables.json",
+      "sha256": "5e7215e1e06ed7ecebc33eb1a0a4023a044205488d8cbe199d7403dc3fde2956",
+      "description": "Complete real released runtime tables export"
+    },
+    {
+      "path": "coverage/views.json",
+      "sha256": "db7016e71387934eeca815fa528d3ad0358de1c1e2e43c90baa4c163c353a6e8",
+      "description": "Complete real released runtime views export"
+    },
+    {
+      "path": "coverage/current-source-review.md",
+      "sha256": "8606e1cb36746877bb97d036c6249548b1e16b8ad157ec54e771bb62b893c558",
+      "description": "Complete current source catalog audit; identical actual release revision"
+    }
+  ]
+}

@@ -1,0 +1,472 @@
+{
+  "schema_version": 1,
+  "status": "met",
+  "meets_target": true,
+  "catalogs": {
+    "released": {
+      "catalog_status": "verified",
+      "revision": "77a249112bafc8ed34f0acadfce6dcb6f2d1c343",
+      "catalog_sha256": "c25467397046c2f68c204f9f2b119f29ed6fd14101e952feabff6ad69be7d906",
+      "collection_reconciled": true,
+      "denominator": 6,
+      "observed_objects": 6,
+      "required": 6,
+      "verified_count": 6,
+      "candidate_count": 0,
+      "fraction": 1.0,
+      "meets_target": true,
+      "exact_runtime_count": 6,
+      "runtime_revisions": [
+        "77a249112bafc8ed34f0acadfce6dcb6f2d1c343"
+      ],
+      "covered": [
+        {
+          "schema": [
+            "examples"
+          ],
+          "name": "fetch_items"
+        },
+        {
+          "schema": [
+            "examples"
+          ],
+          "name": "greet"
+        },
+        {
+          "schema": [
+            "examples"
+          ],
+          "name": "sequence_table"
+        },
+        {
+          "schema": [
+            "main"
+          ],
+          "name": "demo_input"
+        },
+        {
+          "schema": [
+            "main"
+          ],
+          "name": "parcel_series"
+        },
+        {
+          "schema": [
+            "main"
+          ],
+          "name": "radar_series"
+        }
+      ],
+      "uncovered": [],
+      "objects": [
+        {
+          "schema": [
+            "examples"
+          ],
+          "name": "fetch_items",
+          "kinds": [
+            "function"
+          ],
+          "signatures": [
+            "fetch_items(VARCHAR, BIGINT) -> None"
+          ],
+          "access": [
+            "read"
+          ],
+          "authentication": [
+            "optional"
+          ]
+        },
+        {
+          "schema": [
+            "examples"
+          ],
+          "name": "greet",
+          "kinds": [
+            "function"
+          ],
+          "signatures": [
+            "greet(VARCHAR) -> VARCHAR",
+            "greet(VARCHAR, VARCHAR) -> VARCHAR"
+          ],
+          "access": [
+            "read"
+          ],
+          "authentication": [
+            "none"
+          ]
+        },
+        {
+          "schema": [
+            "examples"
+          ],
+          "name": "sequence_table",
+          "kinds": [
+            "function"
+          ],
+          "signatures": [
+            "sequence_table(BIGINT, BIGINT) -> None"
+          ],
+          "access": [
+            "read"
+          ],
+          "authentication": [
+            "none"
+          ]
+        },
+        {
+          "schema": [
+            "main"
+          ],
+          "name": "demo_input",
+          "kinds": [
+            "function",
+            "table"
+          ],
+          "signatures": [
+            "TABLE",
+            "demo_input() -> None"
+          ],
+          "access": [
+            "read"
+          ],
+          "authentication": [
+            "none"
+          ]
+        },
+        {
+          "schema": [
+            "main"
+          ],
+          "name": "parcel_series",
+          "kinds": [
+            "function"
+          ],
+          "signatures": [
+            "parcel_series(TABLE, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, DOUBLE, BIGINT, BIGINT, BIGINT, DOUBLE, DOUBLE, VARCHAR, VARCHAR, VARCHAR, BIGINT, DOUBLE, VARCHAR, VARCHAR, VARCHAR, VARCHAR, BIGINT, VARCHAR) -> None"
+          ],
+          "access": [
+            "read"
+          ],
+          "authentication": [
+            "none"
+          ]
+        },
+        {
+          "schema": [
+            "main"
+          ],
+          "name": "radar_series",
+          "kinds": [
+            "function"
+          ],
+          "signatures": [
+            "radar_series(TABLE, DOUBLE, VARCHAR, VARCHAR, BIGINT, VARCHAR, BIGINT, VARCHAR, VARCHAR, VARCHAR, BIGINT, BIGINT, VARCHAR) -> None"
+          ],
+          "access": [
+            "read"
+          ],
+          "authentication": [
+            "none"
+          ]
+        }
+      ],
+      "issues": []
+    },
+    "current": {
+      "catalog_status": "verified",
+      "revision": "77a249112bafc8ed34f0acadfce6dcb6f2d1c343",
+      "catalog_sha256": "c25467397046c2f68c204f9f2b119f29ed6fd14101e952feabff6ad69be7d906",
+      "collection_reconciled": true,
+      "denominator": 6,
+      "observed_objects": 6,
+      "required": 6,
+      "verified_count": 6,
+      "candidate_count": 0,
+      "fraction": 1.0,
+      "meets_target": true,
+      "exact_runtime_count": 6,
+      "runtime_revisions": [
+        "77a249112bafc8ed34f0acadfce6dcb6f2d1c343"
+      ],
+      "covered": [
+        {
+          "schema": [
+            "examples"
+          ],
+          "name": "fetch_items"
+        },
+        {
+          "schema": [
+            "examples"
+          ],
+          "name": "greet"
+        },
+        {
+          "schema": [
+            "examples"
+          ],
+          "name": "sequence_table"
+        },
+        {
+          "schema": [
+            "main"
+          ],
+          "name": "demo_input"
+        },
+        {
+          "schema": [
+            "main"
+          ],
+          "name": "parcel_series"
+        },
+        {
+          "schema": [
+            "main"
+          ],
+          "name": "radar_series"
+        }
+      ],
+      "uncovered": [],
+      "objects": [
+        {
+          "schema": [
+            "examples"
+          ],
+          "name": "fetch_items",
+          "kinds": [
+            "function"
+          ],
+          "signatures": [
+            "fetch_items(VARCHAR, BIGINT) -> None"
+          ],
+          "access": [
+            "read"
+          ],
+          "authentication": [
+            "optional"
+          ]
+        },
+        {
+          "schema": [
+            "examples"
+          ],
+          "name": "greet",
+          "kinds": [
+            "function"
+          ],
+          "signatures": [
+            "greet(VARCHAR) -> VARCHAR",
+            "greet(VARCHAR, VARCHAR) -> VARCHAR"
+          ],
+          "access": [
+            "read"
+          ],
+          "authentication": [
+            "none"
+          ]
+        },
+        {
+          "schema": [
+            "examples"
+          ],
+          "name": "sequence_table",
+          "kinds": [
+            "function"
+          ],
+          "signatures": [
+            "sequence_table(BIGINT, BIGINT) -> None"
+          ],
+          "access": [
+            "read"
+          ],
+          "authentication": [
+            "none"
+          ]
+        },
+        {
+          "schema": [
+            "main"
+          ],
+          "name": "demo_input",
+          "kinds": [
+            "function",
+            "table"
+          ],
+          "signatures": [
+            "TABLE",
+            "demo_input() -> None"
+          ],
+          "access": [
+            "read"
+          ],
+          "authentication": [
+            "none"
+          ]
+        },
+        {
+          "schema": [
+            "main"
+          ],
+          "name": "parcel_series",
+          "kinds": [
+            "function"
+          ],
+          "signatures": [
+            "parcel_series(TABLE, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, DOUBLE, BIGINT, BIGINT, BIGINT, DOUBLE, DOUBLE, VARCHAR, VARCHAR, VARCHAR, BIGINT, DOUBLE, VARCHAR, VARCHAR, VARCHAR, VARCHAR, BIGINT, VARCHAR) -> None"
+          ],
+          "access": [
+            "read"
+          ],
+          "authentication": [
+            "none"
+          ]
+        },
+        {
+          "schema": [
+            "main"
+          ],
+          "name": "radar_series",
+          "kinds": [
+            "function"
+          ],
+          "signatures": [
+            "radar_series(TABLE, DOUBLE, VARCHAR, VARCHAR, BIGINT, VARCHAR, BIGINT, VARCHAR, VARCHAR, VARCHAR, BIGINT, BIGINT, VARCHAR) -> None"
+          ],
+          "access": [
+            "read"
+          ],
+          "authentication": [
+            "none"
+          ]
+        }
+      ],
+      "issues": []
+    }
+  },
+  "interface_drift": {
+    "known": true,
+    "current_only": [],
+    "released_only": [],
+    "changed": []
+  },
+  "notebooks": {
+    "01_coverage_controls_comparisons.ipynb": {
+      "verified": true,
+      "issues": []
+    },
+    "02_latest_radar_row_is_not_latest_measurement.ipynb": {
+      "verified": true,
+      "issues": []
+    },
+    "03_paginated_inventory_report.ipynb": {
+      "verified": true,
+      "issues": []
+    }
+  },
+  "examples": [
+    {
+      "status": "verified",
+      "issues": [],
+      "verified_catalogs": [
+        "released",
+        "current"
+      ],
+      "object": {
+        "schema": [
+          "main"
+        ],
+        "name": "demo_input"
+      },
+      "notebook": "01_coverage_controls_comparisons.ipynb",
+      "runtime_revision": "77a249112bafc8ed34f0acadfce6dcb6f2d1c343",
+      "runtime_catalog_sha256": "c25467397046c2f68c204f9f2b119f29ed6fd14101e952feabff6ad69be7d906"
+    },
+    {
+      "status": "verified",
+      "issues": [],
+      "verified_catalogs": [
+        "released",
+        "current"
+      ],
+      "object": {
+        "schema": [
+          "main"
+        ],
+        "name": "parcel_series"
+      },
+      "notebook": "01_coverage_controls_comparisons.ipynb",
+      "runtime_revision": "77a249112bafc8ed34f0acadfce6dcb6f2d1c343",
+      "runtime_catalog_sha256": "c25467397046c2f68c204f9f2b119f29ed6fd14101e952feabff6ad69be7d906"
+    },
+    {
+      "status": "verified",
+      "issues": [],
+      "verified_catalogs": [
+        "released",
+        "current"
+      ],
+      "object": {
+        "schema": [
+          "main"
+        ],
+        "name": "radar_series"
+      },
+      "notebook": "02_latest_radar_row_is_not_latest_measurement.ipynb",
+      "runtime_revision": "77a249112bafc8ed34f0acadfce6dcb6f2d1c343",
+      "runtime_catalog_sha256": "c25467397046c2f68c204f9f2b119f29ed6fd14101e952feabff6ad69be7d906"
+    },
+    {
+      "status": "verified",
+      "issues": [],
+      "verified_catalogs": [
+        "released",
+        "current"
+      ],
+      "object": {
+        "schema": [
+          "examples"
+        ],
+        "name": "fetch_items"
+      },
+      "notebook": "03_paginated_inventory_report.ipynb",
+      "runtime_revision": "77a249112bafc8ed34f0acadfce6dcb6f2d1c343",
+      "runtime_catalog_sha256": "c25467397046c2f68c204f9f2b119f29ed6fd14101e952feabff6ad69be7d906"
+    },
+    {
+      "status": "verified",
+      "issues": [],
+      "verified_catalogs": [
+        "released",
+        "current"
+      ],
+      "object": {
+        "schema": [
+          "examples"
+        ],
+        "name": "sequence_table"
+      },
+      "notebook": "03_paginated_inventory_report.ipynb",
+      "runtime_revision": "77a249112bafc8ed34f0acadfce6dcb6f2d1c343",
+      "runtime_catalog_sha256": "c25467397046c2f68c204f9f2b119f29ed6fd14101e952feabff6ad69be7d906"
+    },
+    {
+      "status": "verified",
+      "issues": [],
+      "verified_catalogs": [
+        "released",
+        "current"
+      ],
+      "object": {
+        "schema": [
+          "examples"
+        ],
+        "name": "greet"
+      },
+      "notebook": "03_paginated_inventory_report.ipynb",
+      "runtime_revision": "77a249112bafc8ed34f0acadfce6dcb6f2d1c343",
+      "runtime_catalog_sha256": "c25467397046c2f68c204f9f2b119f29ed6fd14101e952feabff6ad69be7d906"
+    }
+  ],
+  "issues": []
+}

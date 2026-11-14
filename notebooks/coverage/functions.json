@@ -1,0 +1,365 @@
+{
+  "query": "SELECT * FROM duckdb_functions() WHERE database_name='earth_observation' ORDER BY schema_name,function_name",
+  "columns": [
+    "database_name",
+    "database_oid",
+    "schema_name",
+    "function_name",
+    "alias_of",
+    "function_type",
+    "description",
+    "comment",
+    "tags",
+    "return_type",
+    "parameters",
+    "parameter_types",
+    "varargs",
+    "macro_definition",
+    "has_side_effects",
+    "internal",
+    "extension_name",
+    "function_oid",
+    "examples",
+    "stability",
+    "categories"
+  ],
+  "rows": [
+    [
+      "earth_observation",
+      "22592",
+      "examples",
+      "fetch_items",
+      null,
+      "table",
+      "Read every item from a paginated REST API, one page per batch",
+      null,
+      {
+        "vgi.category": "api",
+        "vgi.doc_llm": "Read all items from a paginated JSON REST API at `base_url` and return them as rows `(id, name, category, price)`. Pages are requested `page_size` at a time (named argument, default 100) and streamed to DuckDB as they arrive. If a DuckDB secret of type `earth_observation_api` exists its `token` is sent as a bearer token; otherwise the `EARTH_OBSERVATION_API_TOKEN` environment variable is used. Rate-limit (429) and server errors are retried with backoff.",
+        "vgi.doc_md": "## fetch_items(base_url, page_size := 100)\n\nEvery item from a paginated REST API, streamed one page per batch.\n\nAuthenticate with a `earth_observation_api` secret or the `EARTH_OBSERVATION_API_TOKEN` environment variable:\n\n```sql\nCREATE SECRET (TYPE earth_observation_api, TOKEN 'your-token');\n```",
+        "vgi.example_queries": "[{\"description\": \"The five priciest hardware items from the public demo API\", \"sql\": \"SELECT id, name, price FROM earth_observation.examples.fetch_items('https://vgi-starter-api.query-farm.services/v1') WHERE category = 'hardware' ORDER BY price DESC LIMIT 5\"}, {\"description\": \"Summarize the API's items by category, ten per request\", \"sql\": \"SELECT category, count(*) AS items, avg(price) AS avg_price FROM earth_observation.examples.fetch_items('https://vgi-starter-api.query-farm.services/v1', page_size := 10) GROUP BY category ORDER BY category\"}]",
+        "vgi.keywords": "[\"rest api\", \"http\", \"pagination\", \"fetch\", \"items\", \"json api\", \"bearer token\"]",
+        "vgi.result_columns_schema": "[{\"name\": \"id\", \"type\": \"BIGINT\", \"description\": \"Item identifier assigned by the API.\"}, {\"name\": \"name\", \"type\": \"VARCHAR\", \"description\": \"Item display name.\"}, {\"name\": \"category\", \"type\": \"VARCHAR\", \"description\": \"Item category, e.g. 'hardware'.\"}, {\"name\": \"price\", \"type\": \"DOUBLE\", \"description\": \"Item price in US dollars.\"}]",
+        "vgi.title": "Fetch Items From API"
+      },
+      null,
+      [
+        "base_url",
+        "page_size"
+      ],
+      [
+        "VARCHAR",
+        "BIGINT"
+      ],
+      null,
+      null,
+      null,
+      true,
+      null,
+      22598,
+      [
+        "SELECT id, name, price FROM earth_observation.examples.fetch_items('https://vgi-starter-api.query-farm.services/v1') WHERE category = 'hardware' ORDER BY price DESC LIMIT 5",
+        "SELECT category, count(*) AS items, avg(price) AS avg_price FROM earth_observation.examples.fetch_items('https://vgi-starter-api.query-farm.services/v1', page_size := 10) GROUP BY category ORDER BY category"
+      ],
+      null,
+      []
+    ],
+    [
+      "earth_observation",
+      "22592",
+      "examples",
+      "greet",
+      null,
+      "scalar",
+      "Greet a name casually: greet('Ada') returns 'Hi, Ada!'",
+      null,
+      {
+        "vgi.category": "text",
+        "vgi.doc_llm": "Return a greeting for each input name in the requested tone. `style` must be a constant, either `'casual'` (`'Hi, Ada!'`) or `'formal'` (`'Good day, Ada.'`); any other value is rejected when the query is planned. NULL names produce NULL.",
+        "vgi.doc_md": "## greet(name, style)\n\nA greeting in the chosen tone: `'casual'` or `'formal'`.\n\n`greet('Ada', 'formal')` returns `'Good day, Ada.'`.",
+        "vgi.example_queries": "[{\"description\": \"Greet one name casually\", \"sql\": \"SELECT earth_observation.examples.greet('Ada') AS greeting\"}, {\"description\": \"Greet one name formally\", \"sql\": \"SELECT earth_observation.examples.greet('Ada', 'formal') AS greeting\"}]",
+        "vgi.keywords": "[\"greet\", \"greeting\", \"formal greeting\", \"casual greeting\", \"salutation\", \"tone\"]",
+        "vgi.title": "Greet (with tone)"
+      },
+      "VARCHAR",
+      [
+        "name"
+      ],
+      [
+        "VARCHAR"
+      ],
+      null,
+      null,
+      false,
+      true,
+      null,
+      22597,
+      [
+        "SELECT earth_observation.examples.greet('Ada') AS greeting"
+      ],
+      "CONSISTENT",
+      []
+    ],
+    [
+      "earth_observation",
+      "22592",
+      "examples",
+      "greet",
+      null,
+      "scalar",
+      "Greet a name in a chosen tone: greet('Ada', 'formal') returns 'Good day, Ada.'",
+      null,
+      {
+        "vgi.category": "text",
+        "vgi.doc_llm": "Return a greeting for each input name in the requested tone. `style` must be a constant, either `'casual'` (`'Hi, Ada!'`) or `'formal'` (`'Good day, Ada.'`); any other value is rejected when the query is planned. NULL names produce NULL.",
+        "vgi.doc_md": "## greet(name, style)\n\nA greeting in the chosen tone: `'casual'` or `'formal'`.\n\n`greet('Ada', 'formal')` returns `'Good day, Ada.'`.",
+        "vgi.example_queries": "[{\"description\": \"Greet one name casually\", \"sql\": \"SELECT earth_observation.examples.greet('Ada') AS greeting\"}, {\"description\": \"Greet one name formally\", \"sql\": \"SELECT earth_observation.examples.greet('Ada', 'formal') AS greeting\"}]",
+        "vgi.keywords": "[\"greet\", \"greeting\", \"formal greeting\", \"casual greeting\", \"salutation\", \"tone\"]",
+        "vgi.title": "Greet (with tone)"
+      },
+      "VARCHAR",
+      [
+        "name",
+        "style"
+      ],
+      [
+        "VARCHAR",
+        "VARCHAR"
+      ],
+      null,
+      null,
+      false,
+      true,
+      null,
+      22597,
+      [
+        "SELECT earth_observation.examples.greet('Ada', 'formal') AS greeting"
+      ],
+      "CONSISTENT",
+      []
+    ],
+    [
+      "earth_observation",
+      "22592",
+      "examples",
+      "sequence_table",
+      null,
+      "table",
+      "Generate count rows of (n, squared), stepping n by step",
+      null,
+      {
+        "vgi.category": "generators",
+        "vgi.doc_llm": "Generate a deterministic table of `count` rows with columns `n` and `squared`, where `n` runs `0, step, 2*step, ...`. `count` is positional (0 to 1,000,000); `step` is a named argument that defaults to 1, for example `sequence_table(5, step := 2)`. Rows stream back in batches, so large counts do not buffer in memory.",
+        "vgi.doc_md": "## sequence_table(count, step := 1)\n\n`count` rows of `(n, squared)` with `n = 0, step, 2*step, ...`.\n\nDeterministic, so it is handy for tests and demos.",
+        "vgi.example_queries": "[{\"description\": \"The first five values and their squares\", \"sql\": \"SELECT n, squared FROM earth_observation.examples.sequence_table(5) ORDER BY n\"}, {\"description\": \"Four values stepping by ten\", \"sql\": \"SELECT n FROM earth_observation.examples.sequence_table(4, step := 10) ORDER BY n\"}]",
+        "vgi.executable_examples": "[{\"description\": \"Three rows stepping by two\", \"sql\": \"SELECT n, squared FROM earth_observation.examples.sequence_table(3, step := 2) ORDER BY n\", \"expected_result\": [[0, 0], [2, 4], [4, 16]]}, {\"description\": \"Count the rows generated\", \"sql\": \"SELECT count(*) AS rows FROM earth_observation.examples.sequence_table(1000)\", \"expected_result\": [[1000]]}]",
+        "vgi.keywords": "[\"sequence\", \"series\", \"range\", \"generate rows\", \"numbers\", \"squares\"]",
+        "vgi.result_columns_schema": "[{\"name\": \"n\", \"type\": \"BIGINT\", \"description\": \"The generated value: row index times step.\"}, {\"name\": \"squared\", \"type\": \"BIGINT\", \"description\": \"n multiplied by itself.\"}]",
+        "vgi.title": "Sequence Table"
+      },
+      null,
+      [
+        "count",
+        "step"
+      ],
+      [
+        "BIGINT",
+        "BIGINT"
+      ],
+      null,
+      null,
+      null,
+      true,
+      null,
+      22599,
+      [
+        "SELECT n, squared FROM earth_observation.examples.sequence_table(5) ORDER BY n",
+        "SELECT n FROM earth_observation.examples.sequence_table(4, step := 10) ORDER BY n"
+      ],
+      null,
+      []
+    ],
+    [
+      "earth_observation",
+      "22592",
+      "main",
+      "demo_input",
+      null,
+      "table",
+      "Two synthetic agricultural parcels for the offline satellite demo",
+      null,
+      {
+        "vgi.category": "gis",
+        "vgi.doc_llm": "Two polygons in EPSG:32618 over demo://scenes.json. These are synthetic test parcels with known cloud masks and reflectances, not observations of real farms.",
+        "vgi.doc_md": "## Demo parcels\n\nTwo polygons in EPSG:32618 over demo://scenes.json. These are synthetic test parcels with known cloud masks and reflectances, not observations of real farms.",
+        "vgi.example_queries": "[{\"description\": \"List the bundled parcel IDs\", \"sql\": \"SELECT parcel_id FROM earth_observation.main.demo_input ORDER BY parcel_id\"}]",
+        "vgi.executable_examples": "[{\"description\": \"Demo parcels on bundled synthetic data\", \"sql\": \"SELECT parcel_id FROM earth_observation.main.demo_input ORDER BY parcel_id\", \"expected_result\": [[\"field-a\"], [\"field-b\"]]}]",
+        "vgi.keywords": "[\"GIS\", \"geospatial\", \"earth_observation\", \"analysis\", \"Arrow\", \"SQL\"]",
+        "vgi.result_columns_schema": "[{\"name\": \"parcel_id\", \"type\": \"VARCHAR\", \"description\": \"Caller-owned parcel identity.\"}, {\"name\": \"geometry_wkb\", \"type\": \"BLOB\", \"description\": \"Polygon WKB in geometry_crs.\"}]",
+        "vgi.title": "Demo parcels"
+      },
+      null,
+      [],
+      [],
+      null,
+      null,
+      null,
+      true,
+      null,
+      22600,
+      [
+        "SELECT parcel_id FROM earth_observation.main.demo_input ORDER BY parcel_id"
+      ],
+      null,
+      []
+    ],
+    [
+      "earth_observation",
+      "22592",
+      "main",
+      "parcel_series",
+      null,
+      "table",
+      "Cloud-mask and align satellite bands into parcel index histories and decline flags",
+      null,
+      {
+        "vgi.category": "gis",
+        "vgi.doc_llm": "Build parcel vegetation or water-index histories from STAC ItemCollections or public STAC APIs. Align bands and categorical SCL masks, apply scale/offset metadata, exclude cloudy pixels, optionally form monthly pixel-median composites, and flag declines between adequately observed periods. Output parcel IDs join directly to ownership and weather tables. Synthetic offline assets ship in the wheel. SCL codes 4,5,6 are clear by default; missing quality assets fail. Pixel centres determine polygon membership. No-scenes and low-coverage outcomes are explicit. Declines indicate index changes, not a diagnosed cause. Public HTTP access uses timeouts and bounded pagination.",
+        "vgi.doc_md": "## Parcel satellite history\n\nBuild parcel vegetation or water-index histories from STAC ItemCollections or public STAC APIs. Align bands and categorical SCL masks, apply scale/offset metadata, exclude cloudy pixels, optionally form monthly pixel-median composites, and flag declines between adequately observed periods. Output parcel IDs join directly to ownership and weather tables. Synthetic offline assets ship in the wheel. SCL codes 4,5,6 are clear by default; missing quality assets fail. Pixel centres determine polygon membership. No-scenes and low-coverage outcomes are explicit. Declines indicate index changes, not a diagnosed cause. Public HTTP access uses timeouts and bounded pagination.",
+        "vgi.example_queries": "[{\"description\": \"Find vegetation declines in two synthetic parcels\", \"sql\": \"SELECT parcel_id, round(mean_index, 2), decline FROM earth_observation.main.parcel_series((SELECT * FROM earth_observation.main.demo_input)) ORDER BY parcel_id, observed_at\"}, {\"description\": \"Per parcel, join the count of optical NDVI declines and the worst NDVI change to the VV backscatter change in dB between the first and last fully covered radar acquisitions on each orbit track\", \"sql\": \"WITH optical AS (SELECT parcel_id, count(*) FILTER (WHERE decline) AS ndvi_declines, min(delta_index) AS worst_ndvi_change FROM earth_observation.main.parcel_series((SELECT parcel_id, geometry_wkb FROM earth_observation.main.demo_input)) GROUP BY parcel_id), radar AS (SELECT region_id, relative_orbit, orbit_state, arg_max(mean_db, observed_at) - arg_min(mean_db, observed_at) AS vv_change_db FROM earth_observation.main.radar_series((SELECT parcel_id AS region_id, geometry_wkb FROM earth_observation.main.demo_input), polarizations := 'vv') WHERE status = 'ok' GROUP BY region_id, relative_orbit, orbit_state) SELECT o.parcel_id, o.ndvi_declines, round(o.worst_ndvi_change, 2) AS worst_ndvi_change, r.relative_orbit, r.orbit_state, round(r.vv_change_db, 1) AS vv_change_db FROM optical AS o JOIN radar AS r ON r.region_id = o.parcel_id ORDER BY o.parcel_id, r.relative_orbit, r.orbit_state\"}]",
+        "vgi.executable_examples": "[{\"description\": \"Parcel satellite history on bundled synthetic data\", \"sql\": \"SELECT parcel_id, round(mean_index, 2), decline FROM earth_observation.main.parcel_series((SELECT * FROM earth_observation.main.demo_input)) ORDER BY parcel_id, observed_at\", \"expected_result\": [[\"field-a\", 0.6, null], [\"field-a\", 0.0, true], [\"field-b\", 0.6, null], [\"field-b\", 0.0, true]]}, {\"description\": \"Per parcel, join the count of optical NDVI declines and the worst NDVI change to the VV backscatter change in dB between the first and last fully covered radar acquisitions on each orbit track\", \"sql\": \"WITH optical AS (SELECT parcel_id, count(*) FILTER (WHERE decline) AS ndvi_declines, min(delta_index) AS worst_ndvi_change FROM earth_observation.main.parcel_series((SELECT parcel_id, geometry_wkb FROM earth_observation.main.demo_input)) GROUP BY parcel_id), radar AS (SELECT region_id, relative_orbit, orbit_state, arg_max(mean_db, observed_at) - arg_min(mean_db, observed_at) AS vv_change_db FROM earth_observation.main.radar_series((SELECT parcel_id AS region_id, geometry_wkb FROM earth_observation.main.demo_input), polarizations := 'vv') WHERE status = 'ok' GROUP BY region_id, relative_orbit, orbit_state) SELECT o.parcel_id, o.ndvi_declines, round(o.worst_ndvi_change, 2) AS worst_ndvi_change, r.relative_orbit, r.orbit_state, round(r.vv_change_db, 1) AS vv_change_db FROM optical AS o JOIN radar AS r ON r.region_id = o.parcel_id ORDER BY o.parcel_id, r.relative_orbit, r.orbit_state\", \"expected_result\": [[\"field-a\", 1, -0.6, 77, \"ascending\", -10.0], [\"field-b\", 1, -0.6, 77, \"ascending\", -10.0]]}]",
+        "vgi.keywords": "[\"GIS\", \"geospatial\", \"earth_observation\", \"analysis\", \"Arrow\", \"SQL\"]",
+        "vgi.result_columns_schema": "[{\"name\": \"parcel_id\", \"type\": \"VARCHAR\", \"description\": \"Input parcel ID for joins to ownership and weather.\"}, {\"name\": \"observed_at\", \"type\": \"TIMESTAMP\", \"description\": \"UTC observation time, or first day of the month for monthly composites.\"}, {\"name\": \"index_name\", \"type\": \"VARCHAR\", \"description\": \"ndvi, ndwi, or nbr.\"}, {\"name\": \"mean_index\", \"type\": \"DOUBLE\", \"description\": \"Mean of valid pixel indices, after cloud masking and optional pixel-median compositing.\"}, {\"name\": \"valid_pixels\", \"type\": \"BIGINT\", \"description\": \"Valid, cloud-free polygon pixels in the aligned grid.\"}, {\"name\": \"total_pixels\", \"type\": \"BIGINT\", \"description\": \"Grid pixel centres inside the polygon, including cloudy and missing cells.\"}, {\"name\": \"coverage_fraction\", \"type\": \"DOUBLE\", \"description\": \"Valid pixels divided by total polygon pixels.\"}, {\"name\": \"delta_index\", \"type\": \"DOUBLE\", \"description\": \"Change from the previous adequately observed result within max_change_gap_days.\"}, {\"name\": \"decline\", \"type\": \"BOOLEAN\", \"description\": \"True when delta_index is at most negative decline_threshold; NULL without a valid comparison.\"}, {\"name\": \"scene_count\", \"type\": \"BIGINT\", \"description\": \"Number of contributing candidate scenes in this observation or composite.\"}, {\"name\": \"scene_ids\", \"type\": \"VARCHAR\", \"description\": \"JSON array of source scene identifiers for provenance.\"}, {\"name\": \"calibration\", \"type\": \"VARCHAR\", \"description\": \"JSON per scene and band: effective reflectance scale, offset and source.\"}, {\"name\": \"status\", \"type\": \"VARCHAR\", \"description\": \"ok, insufficient_coverage, or no_scenes; missing coverage never becomes a zero index.\"}, {\"name\": \"analysis_crs\", \"type\": \"VARCHAR\", \"description\": \"CRS of the first selected denominator-band grid, used for all aligned bands.\"}]",
+        "vgi.title": "Parcel satellite history"
+      },
+      null,
+      [
+        "data",
+        "start_date",
+        "swir_asset",
+        "scl_asset",
+        "red_asset",
+        "offset_mode",
+        "nir_asset",
+        "min_coverage",
+        "max_scenes",
+        "max_pixels",
+        "max_pages",
+        "max_cloud",
+        "max_change_gap_days",
+        "index_name",
+        "geometry_crs",
+        "collections",
+        "max_source_pixels",
+        "decline_threshold",
+        "composite",
+        "end_date",
+        "catalog",
+        "clear_scl_classes",
+        "max_json_bytes",
+        "green_asset"
+      ],
+      [
+        "TABLE",
+        "VARCHAR",
+        "VARCHAR",
+        "VARCHAR",
+        "VARCHAR",
+        "VARCHAR",
+        "VARCHAR",
+        "DOUBLE",
+        "BIGINT",
+        "BIGINT",
+        "BIGINT",
+        "DOUBLE",
+        "DOUBLE",
+        "VARCHAR",
+        "VARCHAR",
+        "VARCHAR",
+        "BIGINT",
+        "DOUBLE",
+        "VARCHAR",
+        "VARCHAR",
+        "VARCHAR",
+        "VARCHAR",
+        "BIGINT",
+        "VARCHAR"
+      ],
+      null,
+      null,
+      null,
+      true,
+      null,
+      22601,
+      [
+        "SELECT parcel_id, round(mean_index, 2), decline FROM earth_observation.main.parcel_series((SELECT * FROM earth_observation.main.demo_input)) ORDER BY parcel_id, observed_at",
+        "WITH optical AS (SELECT parcel_id, count(*) FILTER (WHERE decline) AS ndvi_declines, min(delta_index) AS worst_ndvi_change FROM earth_observation.main.parcel_series((SELECT parcel_id, geometry_wkb FROM earth_observation.main.demo_input)) GROUP BY parcel_id), radar AS (SELECT region_id, relative_orbit, orbit_state, arg_max(mean_db, observed_at) - arg_min(mean_db, observed_at) AS vv_change_db FROM earth_observation.main.radar_series((SELECT parcel_id AS region_id, geometry_wkb FROM earth_observation.main.demo_input), polarizations := 'vv') WHERE status = 'ok' GROUP BY region_id, relative_orbit, orbit_state) SELECT o.parcel_id, o.ndvi_declines, round(o.worst_ndvi_change, 2) AS worst_ndvi_change, r.relative_orbit, r.orbit_state, round(r.vv_change_db, 1) AS vv_change_db FROM optical AS o JOIN radar AS r ON r.region_id = o.parcel_id ORDER BY o.parcel_id, r.relative_orbit, r.orbit_state"
+      ],
+      null,
+      []
+    ],
+    [
+      "earth_observation",
+      "22592",
+      "main",
+      "radar_series",
+      null,
+      "table",
+      "Summarize calibrated SAR backscatter by region, acquisition, viewing track and polarization",
+      null,
+      {
+        "vgi.category": "gis",
+        "vgi.doc_llm": "Summarize prepared calibrated SAR intensity assets over polygon regions for time-series change analysis. Input region_id and geometry_wkb columns retain caller identity. Read local STAC ItemCollections or public STAC APIs, using vv/vh assets. This function accepts calibrated terrain-corrected linear power or decibel rasters, not raw radar, complex SLC, or an optical index. Convert dB pixels to linear power before spatial averaging, then report 10*log10(mean_power). Nonpositive linear power, nodata and nonfinite pixels are excluded. Pixel centres define membership. Keep platform, relative_orbit, orbit_state and polarization separate in temporal statistics. A viewing group's rasters must share CRS, resolution and pixel-grid alignment; differing extents are allowed. No resampling or additional speckle filter is performed. Missing observations are NULL, never zero. A change is not a damage probability. Coherence requires a separate phase-preserving SLC pipeline. Private asset signing is outside this function; use prepared local windows.",
+        "vgi.doc_md": "## SAR backscatter histories\n\nSummarize prepared calibrated SAR intensity assets over polygon regions for time-series change analysis. Input region_id and geometry_wkb columns retain caller identity. Read local STAC ItemCollections or public STAC APIs, using vv/vh assets. This function accepts calibrated terrain-corrected linear power or decibel rasters, not raw radar, complex SLC, or an optical index. Convert dB pixels to linear power before spatial averaging, then report 10*log10(mean_power). Nonpositive linear power, nodata and nonfinite pixels are excluded. Pixel centres define membership. Keep platform, relative_orbit, orbit_state and polarization separate in temporal statistics. A viewing group's rasters must share CRS, resolution and pixel-grid alignment; differing extents are allowed. No resampling or additional speckle filter is performed. Missing observations are NULL, never zero. A change is not a damage probability. Coherence requires a separate phase-preserving SLC pipeline. Private asset signing is outside this function; use prepared local windows.",
+        "vgi.example_queries": "[{\"description\": \"Inspect a synthetic radar-return decrease and an explicit missing observation\", \"sql\": \"SELECT observed_at::DATE AS observed_date, round(mean_db, 1), status FROM earth_observation.main.radar_series((SELECT parcel_id AS region_id, geometry_wkb FROM earth_observation.main.demo_input WHERE parcel_id='field-a'), polarizations := 'vv') ORDER BY observed_at\"}, {\"description\": \"Follow up parcels flagged with an optical NDVI decline: VV minus VH backscatter in dB for each fully covered radar acquisition\", \"sql\": \"WITH declined AS (SELECT DISTINCT parcel_id FROM earth_observation.main.parcel_series((SELECT parcel_id, geometry_wkb FROM earth_observation.main.demo_input)) WHERE decline) SELECT region_id, observed_at::DATE AS observed_date, relative_orbit, round(max(mean_db) FILTER (WHERE polarization = 'VV') - max(mean_db) FILTER (WHERE polarization = 'VH'), 1) AS vv_minus_vh_db FROM earth_observation.main.radar_series((SELECT parcel_id AS region_id, geometry_wkb FROM earth_observation.main.demo_input WHERE parcel_id IN (SELECT parcel_id FROM declined))) WHERE status = 'ok' GROUP BY region_id, observed_at, relative_orbit ORDER BY region_id, observed_at\"}]",
+        "vgi.executable_examples": "[{\"description\": \"SAR backscatter histories on bundled synthetic data\", \"sql\": \"SELECT observed_at::DATE AS observed_date, round(mean_db, 1), status FROM earth_observation.main.radar_series((SELECT parcel_id AS region_id, geometry_wkb FROM earth_observation.main.demo_input WHERE parcel_id='field-a'), polarizations := 'vv') ORDER BY observed_at\", \"expected_result\": [[\"2025-08-10\", -10.0, \"ok\"], [\"2025-08-22\", -20.0, \"ok\"], [\"2025-09-03\", null, \"insufficient_coverage\"]]}, {\"description\": \"Follow up parcels flagged with an optical NDVI decline: VV minus VH backscatter in dB for each fully covered radar acquisition\", \"sql\": \"WITH declined AS (SELECT DISTINCT parcel_id FROM earth_observation.main.parcel_series((SELECT parcel_id, geometry_wkb FROM earth_observation.main.demo_input)) WHERE decline) SELECT region_id, observed_at::DATE AS observed_date, relative_orbit, round(max(mean_db) FILTER (WHERE polarization = 'VV') - max(mean_db) FILTER (WHERE polarization = 'VH'), 1) AS vv_minus_vh_db FROM earth_observation.main.radar_series((SELECT parcel_id AS region_id, geometry_wkb FROM earth_observation.main.demo_input WHERE parcel_id IN (SELECT parcel_id FROM declined))) WHERE status = 'ok' GROUP BY region_id, observed_at, relative_orbit ORDER BY region_id, observed_at\", \"expected_result\": [[\"field-a\", \"2025-08-10\", 77, 10.0], [\"field-a\", \"2025-08-22\", 77, 10.0], [\"field-b\", \"2025-08-10\", 77, 10.0], [\"field-b\", \"2025-08-22\", 77, 10.0]]}]",
+        "vgi.keywords": "[\"GIS\", \"geospatial\", \"earth_observation\", \"analysis\", \"Arrow\", \"SQL\"]",
+        "vgi.result_columns_schema": "[{\"name\": \"region_id\", \"type\": \"VARCHAR\", \"description\": \"Caller-owned region identity for joins.\"}, {\"name\": \"observed_at\", \"type\": \"TIMESTAMP\", \"description\": \"UTC acquisition instant; NULL when no scenes match.\"}, {\"name\": \"scene_id\", \"type\": \"VARCHAR\", \"description\": \"STAC scene identifier; overlapping acquisitions must not be counted as independent.\"}, {\"name\": \"platform\", \"type\": \"VARCHAR\", \"description\": \"Satellite identity normalized to lowercase; different satellites remain separate.\"}, {\"name\": \"relative_orbit\", \"type\": \"BIGINT\", \"description\": \"Repeat ground-track identifier; compare within this orbit only.\"}, {\"name\": \"orbit_state\", \"type\": \"VARCHAR\", \"description\": \"Ascending or descending pass direction.\"}, {\"name\": \"polarization\", \"type\": \"VARCHAR\", \"description\": \"VV or VH measurement channel.\"}, {\"name\": \"mean_power\", \"type\": \"DOUBLE\", \"description\": \"Arithmetic spatial mean calibrated linear radar power.\"}, {\"name\": \"mean_db\", \"type\": \"DOUBLE\", \"description\": \"10*log10(mean_power), not the spatial mean of pixel dB values.\"}, {\"name\": \"valid_pixels\", \"type\": \"BIGINT\", \"description\": \"Finite usable pixels whose centres lie in the region.\"}, {\"name\": \"total_pixels\", \"type\": \"BIGINT\", \"description\": \"All region pixel centres, including nodata and cells outside raster coverage.\"}, {\"name\": \"coverage_fraction\", \"type\": \"DOUBLE\", \"description\": \"Usable region pixels divided by total region pixels.\"}, {\"name\": \"grid_crs\", \"type\": \"VARCHAR\", \"description\": \"Native projected raster CRS with metre units.\"}, {\"name\": \"pixel_width_m\", \"type\": \"DOUBLE\", \"description\": \"Raster grid spacing in metres; not necessarily sensor resolving power.\"}, {\"name\": \"pixel_height_m\", \"type\": \"DOUBLE\", \"description\": \"Raster grid spacing in metres; not necessarily sensor resolving power.\"}, {\"name\": \"status\", \"type\": \"VARCHAR\", \"description\": \"ok, insufficient_coverage, no_pixel_centres, or no_scenes.\"}]",
+        "vgi.title": "SAR backscatter histories"
+      },
+      null,
+      [
+        "regions",
+        "min_coverage",
+        "value_unit",
+        "polarizations",
+        "max_pixels",
+        "start_date",
+        "max_json_bytes",
+        "end_date",
+        "collections",
+        "geometry_crs",
+        "max_scenes",
+        "max_pages",
+        "catalog"
+      ],
+      [
+        "TABLE",
+        "DOUBLE",
+        "VARCHAR",
+        "VARCHAR",
+        "BIGINT",
+        "VARCHAR",
+        "BIGINT",
+        "VARCHAR",
+        "VARCHAR",
+        "VARCHAR",
+        "BIGINT",
+        "BIGINT",
+        "VARCHAR"
+      ],
+      null,
+      null,
+      null,
+      true,
+      null,
+      22602,
+      [
+        "SELECT observed_at::DATE AS observed_date, round(mean_db, 1), status FROM earth_observation.main.radar_series((SELECT parcel_id AS region_id, geometry_wkb FROM earth_observation.main.demo_input WHERE parcel_id='field-a'), polarizations := 'vv') ORDER BY observed_at",
+        "WITH declined AS (SELECT DISTINCT parcel_id FROM earth_observation.main.parcel_series((SELECT parcel_id, geometry_wkb FROM earth_observation.main.demo_input)) WHERE decline) SELECT region_id, observed_at::DATE AS observed_date, relative_orbit, round(max(mean_db) FILTER (WHERE polarization = 'VV') - max(mean_db) FILTER (WHERE polarization = 'VH'), 1) AS vv_minus_vh_db FROM earth_observation.main.radar_series((SELECT parcel_id AS region_id, geometry_wkb FROM earth_observation.main.demo_input WHERE parcel_id IN (SELECT parcel_id FROM declined))) WHERE status = 'ok' GROUP BY region_id, observed_at, relative_orbit ORDER BY region_id, observed_at"
+      ],
+      null,
+      []
+    ]
+  ]
+}

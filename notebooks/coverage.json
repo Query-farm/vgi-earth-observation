@@ -1,0 +1,283 @@
+{
+  "schema_version": 1,
+  "catalogs": {
+    "released": {
+      "path": "coverage/catalog-release.json",
+      "sha256": "c25467397046c2f68c204f9f2b119f29ed6fd14101e952feabff6ad69be7d906",
+      "review": {
+        "status": "approved",
+        "reviewer": "Codex /root",
+        "reviewed_at": "2026-11-14T22:41:27.829873+00:00",
+        "catalog_sha256": "c25467397046c2f68c204f9f2b119f29ed6fd14101e952feabff6ad69be7d906",
+        "notes": "All six actual public names across main and examples;7functionrows+1table dedup greeting overloads anddemo_input alias. Source=current actualv0.1.0 revision. Auth-capable fetch_items included with explicit synthetic loopback evidence."
+      }
+    },
+    "current": {
+      "path": "coverage/catalog-current.json",
+      "sha256": "c25467397046c2f68c204f9f2b119f29ed6fd14101e952feabff6ad69be7d906",
+      "review": {
+        "status": "approved",
+        "reviewer": "Codex /root",
+        "reviewed_at": "2026-11-14T22:41:27.829873+00:00",
+        "catalog_sha256": "c25467397046c2f68c204f9f2b119f29ed6fd14101e952feabff6ad69be7d906",
+        "notes": "All six actual public names across main and examples;7functionrows+1table dedup greeting overloads anddemo_input alias. Source=current actualv0.1.0 revision. Auth-capable fetch_items included with explicit synthetic loopback evidence."
+      }
+    }
+  },
+  "notebooks": [
+    {
+      "path": "01_coverage_controls_comparisons.ipynb",
+      "sha256": "9f648a00073cbaaa5eb7569af259f5e1affad4b0c3017af2d6db93ec4100e40a",
+      "execution": {
+        "path": "coverage/run-01.json",
+        "sha256": "a27dab87a60f020367a78c6e7b3f0fb31230916af18dd4793dd66263f623a3c8"
+      }
+    },
+    {
+      "path": "02_latest_radar_row_is_not_latest_measurement.ipynb",
+      "sha256": "e27a3c16fadd9500fdbcf0bb222a85de0379ec7e3792227ce566f2dc66629d31",
+      "execution": {
+        "path": "coverage/run-02.json",
+        "sha256": "4bef4686a5429e597644dc34e0ff117a1b371da1b7c706fb186e5ac14d83b83d"
+      }
+    },
+    {
+      "path": "03_paginated_inventory_report.ipynb",
+      "sha256": "ea66aec639d9bacfa43ba5ee6c9bb37614ea0930c03cb9dd5d1f371a4a59b013",
+      "execution": {
+        "path": "coverage/run-03.json",
+        "sha256": "7e7eb4fc333586e9f570dde34ba09608a4b5a6a624805b68589d113cced3f881"
+      }
+    }
+  ],
+  "examples": [
+    {
+      "object": {
+        "schema": "main",
+        "name": "demo_input"
+      },
+      "notebook": "01_coverage_controls_comparisons.ipynb",
+      "sql": [
+        {
+          "cell": "9362e41a",
+          "reference": "earth_observation.main.demo_input"
+        }
+      ],
+      "narrative_cells": [
+        "b0ff3e35",
+        "68d43cd1"
+      ],
+      "result_cells": [
+        "2aee943a",
+        "5a1c3759",
+        "a212995e"
+      ],
+      "interpretation_cells": [
+        "2aee943a",
+        "a212995e"
+      ],
+      "review": {
+        "status": "approved",
+        "reviewer": "Codex /root",
+        "reviewed_at": "2026-11-14T22:41:27.829873+00:00",
+        "notebook_sha256": "9f648a00073cbaaa5eb7569af259f5e1affad4b0c3017af2d6db93ec4100e40a",
+        "catalog_sha256": [
+          "c25467397046c2f68c204f9f2b119f29ed6fd14101e952feabff6ad69be7d906",
+          "c25467397046c2f68c204f9f2b119f29ed6fd14101e952feabff6ad69be7d906"
+        ],
+        "purpose": "Use the packaged two-polygon relation as actual raster-analysis input with retained IDs and explicit CRS.",
+        "finding": "Reference contains six parcel/acquisition rows with fixed calibration,geometryCRS and counts; the two parcels have different 16/8 pixel-centre denominators. Table/function aliases counted once."
+      }
+    },
+    {
+      "object": {
+        "schema": "main",
+        "name": "parcel_series"
+      },
+      "notebook": "01_coverage_controls_comparisons.ipynb",
+      "sql": [
+        {
+          "cell": "9362e41a",
+          "reference": "earth_observation.main.parcel_series"
+        }
+      ],
+      "narrative_cells": [
+        "52bfee56",
+        "4b98d946"
+      ],
+      "result_cells": [
+        "5a1c3759",
+        "a212995e",
+        "4f8b575f"
+      ],
+      "interpretation_cells": [
+        "a212995e",
+        "4f8b575f",
+        "fd25d294"
+      ],
+      "review": {
+        "status": "approved",
+        "reviewer": "Codex /root",
+        "reviewed_at": "2026-11-14T22:41:27.829873+00:00",
+        "notebook_sha256": "9f648a00073cbaaa5eb7569af259f5e1affad4b0c3017af2d6db93ec4100e40a",
+        "catalog_sha256": [
+          "c25467397046c2f68c204f9f2b119f29ed6fd14101e952feabff6ad69be7d906",
+          "c25467397046c2f68c204f9f2b119f29ed6fd14101e952feabff6ad69be7d906"
+        ],
+        "purpose": "Separate unchanged optical measurements from eligibility and monthly composite availability.",
+        "finding": "Raising coverage .5\u2192.9 retains the full measurement fingerprint while field-a loses its previous eligible baseline; cloudy acquisitionNULL differs from measuredJulyzero. SQL independently reconstructs coverage/status/lagchange/flags. No real sensor-validation claim."
+      }
+    },
+    {
+      "object": {
+        "schema": "main",
+        "name": "radar_series"
+      },
+      "notebook": "02_latest_radar_row_is_not_latest_measurement.ipynb",
+      "sql": [
+        {
+          "cell": "input",
+          "reference": "earth_observation.main.radar_series"
+        }
+      ],
+      "narrative_cells": [
+        "input-story",
+        "latest-story",
+        "change-story"
+      ],
+      "result_cells": [
+        "history-result",
+        "latest-result",
+        "change-result",
+        "check-results"
+      ],
+      "interpretation_cells": [
+        "history-result",
+        "latest-result",
+        "change-result",
+        "experiment"
+      ],
+      "review": {
+        "status": "approved",
+        "reviewer": "Codex /root",
+        "reviewed_at": "2026-11-14T22:41:27.829873+00:00",
+        "notebook_sha256": "e27a3c16fadd9500fdbcf0bb222a85de0379ec7e3792227ce566f2dc66629d31",
+        "catalog_sha256": [
+          "c25467397046c2f68c204f9f2b119f29ed6fd14101e952feabff6ad69be7d906",
+          "c25467397046c2f68c204f9f2b119f29ed6fd14101e952feabff6ad69be7d906"
+        ],
+        "purpose": "Keep latest-acquisition status distinct from latest usable value and reconcile grouped power/dB changes.",
+        "finding": "Full12-row history hasfour unavailableSeptemberrows; August-only8rows preserveallshared values andfour12day comparisons. SQLpower-ratio logmatches-10dB, with viewingkeys retained. Synthetic2025radar dates are not alignedwith2026optical eventdates."
+      }
+    },
+    {
+      "object": {
+        "schema": "examples",
+        "name": "fetch_items"
+      },
+      "notebook": "03_paginated_inventory_report.ipynb",
+      "sql": [
+        {
+          "cell": "fetch-sql",
+          "reference": "earth_observation.examples.fetch_items"
+        }
+      ],
+      "narrative_cells": [
+        "fetch-question"
+      ],
+      "result_cells": [
+        "fetch-finding",
+        "inventory-figure",
+        "checks-finding"
+      ],
+      "interpretation_cells": [
+        "fetch-finding",
+        "experiment"
+      ],
+      "review": {
+        "status": "approved",
+        "reviewer": "Codex /root",
+        "reviewed_at": "2026-11-14T22:41:27.829873+00:00",
+        "notebook_sha256": "ea66aec639d9bacfa43ba5ee6c9bb37614ea0930c03cb9dd5d1f371a4a59b013",
+        "catalog_sha256": [
+          "c25467397046c2f68c204f9f2b119f29ed6fd14101e952feabff6ad69be7d906",
+          "c25467397046c2f68c204f9f2b119f29ed6fd14101e952feabff6ad69be7d906"
+        ],
+        "purpose": "Read every synthetic local API page once before comparing per-item prices.",
+        "finding": "Actualreleased functionfollows3pages of2items,independently auditedrequestsequenceandcomplete6IDs/prices. No credentials sent; synthetic420USDtotal fixed acrossbudgetexperiment. GenericAPIrecipe isnotSTAC."
+      }
+    },
+    {
+      "object": {
+        "schema": "examples",
+        "name": "sequence_table"
+      },
+      "notebook": "03_paginated_inventory_report.ipynb",
+      "sql": [
+        {
+          "cell": "sequence-sql",
+          "reference": "earth_observation.examples.sequence_table"
+        }
+      ],
+      "narrative_cells": [
+        "sequence-question"
+      ],
+      "result_cells": [
+        "sequence-finding",
+        "checks-finding"
+      ],
+      "interpretation_cells": [
+        "sequence-finding",
+        "experiment"
+      ],
+      "review": {
+        "status": "approved",
+        "reviewer": "Codex /root",
+        "reviewed_at": "2026-11-14T22:41:27.829873+00:00",
+        "notebook_sha256": "ea66aec639d9bacfa43ba5ee6c9bb37614ea0930c03cb9dd5d1f371a4a59b013",
+        "catalog_sha256": [
+          "c25467397046c2f68c204f9f2b119f29ed6fd14101e952feabff6ad69be7d906",
+          "c25467397046c2f68c204f9f2b119f29ed6fd14101e952feabff6ad69be7d906"
+        ],
+        "purpose": "Generate all seven budget scenarios including zero, then join the complete item population.",
+        "finding": "Fixed0..150USDgrid by25 containsmonotoniccount0..6; selected50\u219275changesaffordable3\u21924withoutchanginginputorfullgrid. Notbasketoptimizationorprocurementrecommendation."
+      }
+    },
+    {
+      "object": {
+        "schema": "examples",
+        "name": "greet"
+      },
+      "notebook": "03_paginated_inventory_report.ipynb",
+      "sql": [
+        {
+          "cell": "greeting-sql",
+          "reference": "earth_observation.examples.greet"
+        }
+      ],
+      "narrative_cells": [
+        "greeting-question"
+      ],
+      "result_cells": [
+        "greeting-finding",
+        "checks-finding"
+      ],
+      "interpretation_cells": [
+        "greeting-finding",
+        "experiment"
+      ],
+      "review": {
+        "status": "approved",
+        "reviewer": "Codex /root",
+        "reviewed_at": "2026-11-14T22:41:27.829873+00:00",
+        "notebook_sha256": "ea66aec639d9bacfa43ba5ee6c9bb37614ea0930c03cb9dd5d1f371a4a59b013",
+        "catalog_sha256": [
+          "c25467397046c2f68c204f9f2b119f29ed6fd14101e952feabff6ad69be7d906",
+          "c25467397046c2f68c204f9f2b119f29ed6fd14101e952feabff6ad69be7d906"
+        ],
+        "purpose": "Preview casual/formal report strings while retaining a NULL reviewer.",
+        "finding": "Both actualoverloadsformat twofictionalnames andpreserveNULL; noidentitylookup/message/action. Fullpreviewsprintedwithouttruncation; costscenariochangesappropriatetextonly."
+      }
+    }
+  ]
+}

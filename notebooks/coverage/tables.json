@@ -1,0 +1,51 @@
+{
+  "query": "SELECT * FROM duckdb_tables() WHERE database_name='earth_observation' ORDER BY schema_name,table_name",
+  "columns": [
+    "database_name",
+    "database_oid",
+    "schema_name",
+    "schema_oid",
+    "table_name",
+    "table_oid",
+    "comment",
+    "tags",
+    "internal",
+    "temporary",
+    "has_primary_key",
+    "estimated_size",
+    "column_count",
+    "index_count",
+    "check_constraint_count",
+    "sql"
+  ],
+  "rows": [
+    [
+      "earth_observation",
+      22592,
+      "main",
+      22593,
+      "demo_input",
+      22733,
+      "Two synthetic agricultural parcels for the offline satellite demo",
+      {
+        "domain": "geospatial",
+        "vgi.category": "gis",
+        "vgi.doc_llm": "Two polygons in EPSG:32618 over demo://scenes.json. These are synthetic test parcels with known cloud masks and reflectances, not observations of real farms.",
+        "vgi.doc_md": "## Demo parcels\n\nTwo polygons in EPSG:32618 over demo://scenes.json. These are synthetic test parcels with known cloud masks and reflectances, not observations of real farms.",
+        "vgi.example_queries": "[{\"description\": \"List the bundled parcel IDs\", \"sql\": \"SELECT parcel_id FROM earth_observation.main.demo_input ORDER BY parcel_id\"}]",
+        "vgi.executable_examples": "[{\"description\": \"Demo parcels on bundled synthetic data\", \"sql\": \"SELECT parcel_id FROM earth_observation.main.demo_input ORDER BY parcel_id\", \"expected_result\": [[\"field-a\"], [\"field-b\"]]}]",
+        "vgi.keywords": "[\"GIS\", \"geospatial\", \"earth_observation\", \"analysis\", \"Arrow\", \"SQL\"]",
+        "vgi.result_columns_schema": "[{\"name\": \"parcel_id\", \"type\": \"VARCHAR\", \"description\": \"Caller-owned parcel identity.\"}, {\"name\": \"geometry_wkb\", \"type\": \"BLOB\", \"description\": \"Polygon WKB in geometry_crs.\"}]",
+        "vgi.title": "Demo parcels"
+      },
+      false,
+      false,
+      true,
+      0,
+      2,
+      1,
+      0,
+      "CREATE TABLE demo_input(parcel_id VARCHAR, geometry_wkb BLOB, PRIMARY KEY(parcel_id));"
+    ]
+  ]
+}
