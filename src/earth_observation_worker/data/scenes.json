@@ -1,0 +1,279 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "stac_version": "1.0.0",
+      "id": "scene-0",
+      "collection": "sentinel-2-l2a",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -74.99955016847008,
+              37.04622247505587
+            ],
+            [
+              -74.99955016634239,
+              37.04658304941968
+            ],
+            [
+              -75.0,
+              37.046583050272446
+            ],
+            [
+              -75.0,
+              37.04622247590861
+            ],
+            [
+              -74.99955016847008,
+              37.04622247505587
+            ]
+          ]
+        ]
+      },
+      "bbox": [
+        -75.0,
+        37.04622247505587,
+        -74.99955016634239,
+        37.046583050272446
+      ],
+      "properties": {
+        "datetime": "2026-06-01T00:00:00Z",
+        "eo:cloud_cover": 0
+      },
+      "assets": {
+        "red": {
+          "href": "scene0_red.tif",
+          "raster:bands": [
+            {
+              "scale": 0.0001,
+              "offset": 0
+            }
+          ]
+        },
+        "nir08": {
+          "href": "scene0_nir08.tif",
+          "raster:bands": [
+            {
+              "scale": 0.0001,
+              "offset": 0
+            }
+          ]
+        },
+        "green": {
+          "href": "scene0_green.tif",
+          "raster:bands": [
+            {
+              "scale": 0.0001,
+              "offset": 0
+            }
+          ]
+        },
+        "swir22": {
+          "href": "scene0_swir22.tif",
+          "raster:bands": [
+            {
+              "scale": 0.0001,
+              "offset": 0
+            }
+          ]
+        },
+        "scl": {
+          "href": "scene0_scl.tif",
+          "raster:bands": [
+            {
+              "scale": 1,
+              "offset": 0
+            }
+          ]
+        }
+      },
+      "links": []
+    },
+    {
+      "type": "Feature",
+      "stac_version": "1.0.0",
+      "id": "scene-1",
+      "collection": "sentinel-2-l2a",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -74.99955016847008,
+              37.04622247505587
+            ],
+            [
+              -74.99955016634239,
+              37.04658304941968
+            ],
+            [
+              -75.0,
+              37.046583050272446
+            ],
+            [
+              -75.0,
+              37.04622247590861
+            ],
+            [
+              -74.99955016847008,
+              37.04622247505587
+            ]
+          ]
+        ]
+      },
+      "bbox": [
+        -75.0,
+        37.04622247505587,
+        -74.99955016634239,
+        37.046583050272446
+      ],
+      "properties": {
+        "datetime": "2026-06-15T00:00:00Z",
+        "eo:cloud_cover": 0
+      },
+      "assets": {
+        "red": {
+          "href": "scene1_red.tif",
+          "raster:bands": [
+            {
+              "scale": 0.0001,
+              "offset": 0
+            }
+          ]
+        },
+        "nir08": {
+          "href": "scene1_nir08.tif",
+          "raster:bands": [
+            {
+              "scale": 0.0001,
+              "offset": 0
+            }
+          ]
+        },
+        "green": {
+          "href": "scene1_green.tif",
+          "raster:bands": [
+            {
+              "scale": 0.0001,
+              "offset": 0
+            }
+          ]
+        },
+        "swir22": {
+          "href": "scene1_swir22.tif",
+          "raster:bands": [
+            {
+              "scale": 0.0001,
+              "offset": 0
+            }
+          ]
+        },
+        "scl": {
+          "href": "scene1_scl.tif",
+          "raster:bands": [
+            {
+              "scale": 1,
+              "offset": 0
+            }
+          ]
+        }
+      },
+      "links": []
+    },
+    {
+      "type": "Feature",
+      "stac_version": "1.0.0",
+      "id": "scene-2",
+      "collection": "sentinel-2-l2a",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -74.99955016847008,
+              37.04622247505587
+            ],
+            [
+              -74.99955016634239,
+              37.04658304941968
+            ],
+            [
+              -75.0,
+              37.046583050272446
+            ],
+            [
+              -75.0,
+              37.04622247590861
+            ],
+            [
+              -74.99955016847008,
+              37.04622247505587
+            ]
+          ]
+        ]
+      },
+      "bbox": [
+        -75.0,
+        37.04622247505587,
+        -74.99955016634239,
+        37.046583050272446
+      ],
+      "properties": {
+        "datetime": "2026-07-01T00:00:00Z",
+        "eo:cloud_cover": 0
+      },
+      "assets": {
+        "red": {
+          "href": "scene2_red.tif",
+          "raster:bands": [
+            {
+              "scale": 0.0001,
+              "offset": 0
+            }
+          ]
+        },
+        "nir08": {
+          "href": "scene2_nir08.tif",
+          "raster:bands": [
+            {
+              "scale": 0.0001,
+              "offset": 0
+            }
+          ]
+        },
+        "green": {
+          "href": "scene2_green.tif",
+          "raster:bands": [
+            {
+              "scale": 0.0001,
+              "offset": 0
+            }
+          ]
+        },
+        "swir22": {
+          "href": "scene2_swir22.tif",
+          "raster:bands": [
+            {
+              "scale": 0.0001,
+              "offset": 0
+            }
+          ]
+        },
+        "scl": {
+          "href": "scene2_scl.tif",
+          "raster:bands": [
+            {
+              "scale": 1,
+              "offset": 0
+            }
+          ]
+        }
+      },
+      "links": []
+    }
+  ],
+  "links": []
+}

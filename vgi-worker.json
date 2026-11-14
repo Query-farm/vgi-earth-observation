@@ -1,0 +1,152 @@
+{
+  "schema_version": 1,
+  "catalog": "earth_observation",
+  "worker": [
+    ".venv/bin/vgi-earth-observation-worker"
+  ],
+  "checks": [
+    {
+      "name": "Demo parcels on bundled synthetic data",
+      "sql": "SELECT parcel_id FROM earth_observation.main.demo_input ORDER BY parcel_id",
+      "rows": [
+        [
+          "field-a"
+        ],
+        [
+          "field-b"
+        ]
+      ]
+    },
+    {
+      "name": "Parcel satellite history on bundled synthetic data",
+      "sql": "SELECT parcel_id, round(mean_index, 2), decline FROM earth_observation.main.parcel_series((SELECT * FROM earth_observation.main.demo_input)) ORDER BY parcel_id, observed_at",
+      "rows": [
+        [
+          "field-a",
+          0.6,
+          null
+        ],
+        [
+          "field-a",
+          0.0,
+          true
+        ],
+        [
+          "field-b",
+          0.6,
+          null
+        ],
+        [
+          "field-b",
+          0.0,
+          true
+        ]
+      ]
+    },
+    {
+      "name": "Empty parcel relation",
+      "sql": "SELECT count(*) FROM earth_observation.main.parcel_series((SELECT * FROM earth_observation.main.demo_input WHERE false))",
+      "rows": [
+        [
+          0
+        ]
+      ]
+    },
+    {
+      "name": "Multiple input batches without invented observations",
+      "sql": "SELECT count(*), count(mean_index), min(status) FROM earth_observation.main.parcel_series((SELECT i::VARCHAR parcel_id, geometry_wkb FROM earth_observation.main.demo_input CROSS JOIN range(2501) t(i) WHERE parcel_id='field-a'), end_date := '2026-01-02')",
+      "rows": [
+        [
+          2501,
+          0,
+          "no_scenes"
+        ]
+      ]
+    },
+    {
+      "name": "Declines joined to ownership and weather",
+      "sql": "WITH owners(parcel_id, owner_name) AS (VALUES ('field-a', 'North Farm'), ('field-b', 'River Farm')),\nweather(month_start, rain_mm) AS (VALUES (DATE '2026-07-01', 10.0)),\nseries AS (SELECT * FROM earth_observation.main.parcel_series((SELECT * FROM earth_observation.main.demo_input)))\nSELECT s.parcel_id, o.owner_name, round(s.delta_index, 2) AS delta_ndvi, w.rain_mm::DOUBLE AS rain_mm\nFROM series s JOIN owners o USING(parcel_id)\nJOIN weather w ON s.observed_at::DATE = w.month_start\nWHERE s.decline ORDER BY s.parcel_id",
+      "rows": [
+        [
+          "field-a",
+          "North Farm",
+          -0.6,
+          10.0
+        ],
+        [
+          "field-b",
+          "River Farm",
+          -0.6,
+          10.0
+        ]
+      ]
+    },
+    {
+      "name": "SAR known values and explicit missing data",
+      "sql": "SELECT observed_at::DATE AS observed_date, round(mean_db, 1), status FROM earth_observation.main.radar_series((SELECT parcel_id AS region_id, geometry_wkb FROM earth_observation.main.demo_input WHERE parcel_id='field-a'), polarizations := 'vv') ORDER BY observed_at",
+      "rows": [
+        [
+          "2025-08-10",
+          -10.0,
+          "ok"
+        ],
+        [
+          "2025-08-22",
+          -20.0,
+          "ok"
+        ],
+        [
+          "2025-09-03",
+          null,
+          "insufficient_coverage"
+        ]
+      ]
+    },
+    {
+      "name": "SAR polarization groups",
+      "sql": "SELECT polarization, count(mean_db), round(max(mean_db)-min(mean_db), 1) FROM earth_observation.main.radar_series((SELECT parcel_id AS region_id, geometry_wkb FROM earth_observation.main.demo_input WHERE parcel_id='field-a')) GROUP BY polarization ORDER BY polarization",
+      "rows": [
+        [
+          "VH",
+          2,
+          10.0
+        ],
+        [
+          "VV",
+          2,
+          10.0
+        ]
+      ]
+    },
+    {
+      "name": "SAR empty input",
+      "sql": "SELECT count(*) FROM earth_observation.main.radar_series((SELECT parcel_id AS region_id, geometry_wkb FROM earth_observation.main.demo_input WHERE false))",
+      "rows": [
+        [
+          0
+        ]
+      ]
+    },
+    {
+      "name": "SAR multiple batches without invented observations",
+      "sql": "SELECT count(*), count(mean_db), min(status) FROM earth_observation.main.radar_series((SELECT i::VARCHAR AS region_id, geometry_wkb FROM earth_observation.main.demo_input CROSS JOIN range(2501) t(i) WHERE parcel_id='field-a'), end_date := '2025-01-02')",
+      "rows": [
+        [
+          2501,
+          0,
+          "no_scenes"
+        ]
+      ]
+    },
+    {
+      "name": "SAR expanded output over 4096 rows",
+      "sql": "SELECT count(*), count(mean_db) FROM earth_observation.main.radar_series((SELECT i::VARCHAR AS region_id, geometry_wkb FROM earth_observation.main.demo_input CROSS JOIN range(700) t(i) WHERE parcel_id='field-a'))",
+      "rows": [
+        [
+          4200,
+          2800
+        ]
+      ]
+    }
+  ]
+}

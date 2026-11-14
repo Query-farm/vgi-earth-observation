@@ -3,14 +3,23 @@
 # See https://github.com/Query-farm/vgi-lint-check (VGI920).
 tasks:
   - name: formal_greeting
-    reference_sql: SELECT starter.main.greet('Grace', 'formal') AS greeting
+    reference_sql: SELECT earth_observation.examples.greet('Grace', 'formal') AS greeting
   - name: sum_of_squares
-    reference_sql: SELECT sum(squared) AS total FROM starter.main.sequence_table(10)
+    reference_sql: SELECT sum(squared) AS total FROM earth_observation.examples.sequence_table(10)
   - name: stepped_sequence
-    reference_sql: SELECT n FROM starter.main.sequence_table(4, step := 5) ORDER BY n
+    reference_sql: SELECT n FROM earth_observation.examples.sequence_table(4, step := 5) ORDER BY n
   # Reads the public demo API (https://vgi-starter-api.query-farm.services/v1).
   - name: items_per_category
     check_sql: >-
       SELECT count(*) = 3 AND sum(items) = 25
       FROM (SELECT category, count(*) AS items
-            FROM starter.main.fetch_items('https://vgi-starter-api.query-farm.services/v1') GROUP BY category)
+            FROM earth_observation.examples.fetch_items('https://vgi-starter-api.query-farm.services/v1') GROUP BY category)
+
+  - name: gis_demo_input
+    reference_sql: "SELECT parcel_id FROM earth_observation.main.demo_input ORDER BY parcel_id"
+
+  - name: gis_parcel_series
+    reference_sql: "SELECT parcel_id, round(mean_index, 2), decline FROM earth_observation.main.parcel_series((SELECT * FROM earth_observation.main.demo_input)) ORDER BY parcel_id, observed_at"
+
+  - name: gis_radar_series
+    reference_sql: "SELECT observed_at::DATE AS observed_date, round(mean_db, 1), status FROM earth_observation.main.radar_series((SELECT parcel_id AS region_id, geometry_wkb FROM earth_observation.main.demo_input WHERE parcel_id='field-a'), polarizations := 'vv') ORDER BY observed_at"

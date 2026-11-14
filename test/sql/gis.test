@@ -1,0 +1,69 @@
+# GIS domain acceptance tests for earth_observation.
+require vgi
+
+require-env EARTH_OBSERVATION_WORKER
+
+statement ok
+ATTACH 'earth_observation' (TYPE vgi, LOCATION '{EARTH_OBSERVATION_WORKER}');
+
+# Demo parcels on bundled synthetic data
+query T
+SELECT parcel_id FROM earth_observation.main.demo_input ORDER BY parcel_id;
+----
+field-a
+field-b
+
+# Parcel satellite history on bundled synthetic data
+query TTT
+SELECT parcel_id, round(mean_index, 2), decline FROM earth_observation.main.parcel_series((SELECT * FROM earth_observation.main.demo_input)) ORDER BY parcel_id, observed_at;
+----
+field-a	0.6	NULL
+field-a	0.0	true
+field-b	0.6	NULL
+field-b	0.0	true
+
+# Empty parcel relation
+query T
+SELECT count(*) FROM earth_observation.main.parcel_series((SELECT * FROM earth_observation.main.demo_input WHERE false));
+----
+0
+
+# Multiple input batches without invented observations
+query TTT
+SELECT count(*), count(mean_index), min(status) FROM earth_observation.main.parcel_series((SELECT i::VARCHAR parcel_id, geometry_wkb FROM earth_observation.main.demo_input CROSS JOIN range(2501) t(i) WHERE parcel_id='field-a'), end_date := '2026-01-02');
+----
+2501	0	no_scenes
+
+# Declines joined to ownership and weather
+query TTTT
+WITH owners(parcel_id, owner_name) AS (VALUES ('field-a', 'North Farm'), ('field-b', 'River Farm')),
+weather(month_start, rain_mm) AS (VALUES (DATE '2026-07-01', 10.0)),
+series AS (SELECT * FROM earth_observation.main.parcel_series((SELECT * FROM earth_observation.main.demo_input)))
+SELECT s.parcel_id, o.owner_name, round(s.delta_index, 2) AS delta_ndvi, w.rain_mm::DOUBLE AS rain_mm
+FROM series s JOIN owners o USING(parcel_id)
+JOIN weather w ON s.observed_at::DATE = w.month_start
+WHERE s.decline ORDER BY s.parcel_id;
+----
+field-a	North Farm	-0.6	10.0
+field-b	River Farm	-0.6	10.0
+
+statement error
+SELECT * FROM earth_observation.main.parcel_series((SELECT 1 AS wrong_column));
+----
+Missing input columns
+
+# Constant controls must not accept infinity.
+statement error
+SELECT * FROM earth_observation.main.parcel_series((SELECT * FROM earth_observation.main.demo_input), max_change_gap_days := 'Infinity'::DOUBLE);
+----
+finite
+
+statement error
+SELECT * FROM earth_observation.main.parcel_series((SELECT * FROM earth_observation.main.demo_input), clear_scl_classes := '4,99');
+----
+SCL codes
+
+statement error
+SELECT * FROM earth_observation.main.parcel_series((SELECT * FROM earth_observation.main.demo_input), start_date := '2027-01-01', end_date := '2026-01-01');
+----
+start_date

@@ -1,0 +1,104 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "synthetic-radar-0",
+      "geometry": null,
+      "properties": {
+        "datetime": "2025-08-10T00:00:00Z",
+        "platform": "sentinel-1a",
+        "sat:relative_orbit": 77,
+        "sat:orbit_state": "ascending"
+      },
+      "assets": {
+        "vv": {
+          "href": "radar0_vv.tif",
+          "type": "image/tiff; application=geotiff",
+          "raster:bands": [
+            {
+              "nodata": 0,
+              "data_type": "float32"
+            }
+          ]
+        },
+        "vh": {
+          "href": "radar0_vh.tif",
+          "type": "image/tiff; application=geotiff",
+          "raster:bands": [
+            {
+              "nodata": 0,
+              "data_type": "float32"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "synthetic-radar-1",
+      "geometry": null,
+      "properties": {
+        "datetime": "2025-08-22T00:00:00Z",
+        "platform": "sentinel-1a",
+        "sat:relative_orbit": 77,
+        "sat:orbit_state": "ascending"
+      },
+      "assets": {
+        "vv": {
+          "href": "radar1_vv.tif",
+          "type": "image/tiff; application=geotiff",
+          "raster:bands": [
+            {
+              "nodata": 0,
+              "data_type": "float32"
+            }
+          ]
+        },
+        "vh": {
+          "href": "radar1_vh.tif",
+          "type": "image/tiff; application=geotiff",
+          "raster:bands": [
+            {
+              "nodata": 0,
+              "data_type": "float32"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "synthetic-radar-2",
+      "geometry": null,
+      "properties": {
+        "datetime": "2025-09-03T00:00:00Z",
+        "platform": "sentinel-1a",
+        "sat:relative_orbit": 77,
+        "sat:orbit_state": "ascending"
+      },
+      "assets": {
+        "vv": {
+          "href": "radar2_vv.tif",
+          "type": "image/tiff; application=geotiff",
+          "raster:bands": [
+            {
+              "nodata": 0,
+              "data_type": "float32"
+            }
+          ]
+        },
+        "vh": {
+          "href": "radar2_vh.tif",
+          "type": "image/tiff; application=geotiff",
+          "raster:bands": [
+            {
+              "nodata": 0,
+              "data_type": "float32"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
