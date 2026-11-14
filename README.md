@@ -15,6 +15,13 @@ make verify-stock
 make check
 ```
 
+To attach a tagged release without cloning, let uv fetch it:
+
+```sql
+ATTACH 'earth_observation' (TYPE vgi,
+  LOCATION 'uvx --from git+https://github.com/Query-farm/vgi-earth-observation@v0.1.0 vgi-earth-observation-worker');
+```
+
 `make demo` runs [demo.sql](demo.sql) in stock DuckDB 2.0.0. Demo datasets ship inside the wheel; no data credentials are required. The first run downloads dependencies and signed SQL extensions. `make verify-stock` asserts every expected result in [vgi-worker.json](vgi-worker.json), including empty inputs, joins and multiple batches.
 
 ## Analysis contract
