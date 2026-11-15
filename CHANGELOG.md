@@ -8,6 +8,7 @@
 - The bundled synthetic parcels are now `main.sample_parcels` (formerly `main.demo_input`);
   same two rows and columns.
 - Dropped the starter's SDK recipe scripts (`examples/*.py`), mock REST API and their tests.
+- The catalog comment is now a short plain-text description of what the worker covers; the detailed analysis notes remain in the catalog's `vgi.doc_md` and `vgi.doc_llm` documentation.
 
 ## 0.1.0 (2026-11-14)
 

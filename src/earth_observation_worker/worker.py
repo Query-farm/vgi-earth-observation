@@ -36,6 +36,15 @@ GIS_FUNCTIONS = [*GIS_FUNCTIONS, RadarSeries]
 GIS_DESCRIPTION = GIS_DESCRIPTION + " " + RADAR_DESCRIPTION
 
 
+# One-paragraph catalog description shown in directories (VGI001); the long
+# analysis guidance lives in the vgi.doc_md / vgi.doc_llm tags.
+CATALOG_COMMENT = (
+    "Satellite imagery histories for land parcels and regions from STAC catalogs: cloud-masked Sentinel-2 "
+    "vegetation and water indices and calibrated Sentinel-1 radar backscatter, with change flags. Reads "
+    "local STAC files or public STAC APIs; offline sample scenes are included."
+)
+
+
 def _stamp_example_queries(functions: list[type[Any]]) -> list[dict[str, str]]:
     """Publish each function's examples as ``vgi.example_queries`` (with descriptions).
 
@@ -62,7 +71,7 @@ class EarthObservationWorker(Worker):
 
     catalog = Catalog(
         name=CATALOG_NAME,
-        comment=GIS_DESCRIPTION,
+        comment=CATALOG_COMMENT,
         source_url=SOURCE_URL,
         tags={
             **CATALOG_TAGS,
