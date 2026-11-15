@@ -1,6 +1,6 @@
 [project]
 name = "vgi-earth-observation-worker"
-version = "0.2.0"
+version = "0.2.1"
 description = "Python GIS earth observation analysis exposed as VGI SQL functions."
 readme = "README.md"
 license = "0BSD"

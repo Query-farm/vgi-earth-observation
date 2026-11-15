@@ -1,6 +1,11 @@
 # Changelog
 
-## 0.2.0 (unreleased)
+## 0.2.1
+
+- Docs link to upstream sources: the catalog `vgi.doc_md` gains a Sources and references section linking the STAC specification, Earth Search, the Sentinel-2 processing notes (SCL codes), the Sentinel-1 RTC collection on Planetary Computer and Rasterio (VGI183).
+- The README quick-start install pin now points at v0.2.1.
+
+## 0.2.0 (2026-11-14)
 
 - Removed the starter template's demo schema (`examples.greet`/`fetch_items`/`sequence_table`),
   `demo_input` and the placeholder `earth_observation_api` secret type. The worker now

@@ -25,6 +25,7 @@ from vgi.catalog import Catalog, Schema
 from .analysis import GIS_DESCRIPTION, GIS_FUNCTIONS, GIS_TABLES
 from .meta import (
     CATALOG_NAME,
+    CATALOG_REFERENCES_MD,
     CATALOG_TAGS,
     SCHEMA_CATEGORIES,
     SOURCE_URL,
@@ -79,7 +80,8 @@ class EarthObservationWorker(Worker):
             "vgi.doc_md": "## GIS analysis\n\n" + GIS_DESCRIPTION + "\n\n### SQL workflow\n\n"
             "Pass query results to the main schema functions, retaining IDs for joins. "
             "Use bundled synthetic data to try the executable examples without network access. "
-            "CRS, coverage, inference limits and resource bounds are explicit function parameters.",
+            "CRS, coverage, inference limits and resource bounds are explicit function parameters."
+            + CATALOG_REFERENCES_MD,
             "vgi.subtitle": "Optical index and calibrated radar histories for geospatial SQL queries.",
         },
         schemas=[

@@ -31,6 +31,23 @@ SCHEMA_CATEGORIES = [
 ]
 
 
+# Upstream specs, data providers and libraries the catalog docs link to (VGI183).
+CATALOG_REFERENCES_MD = (
+    "\n\n## Sources and references\n\n"
+    "- [STAC specification](https://stacspec.org/): the SpatioTemporal Asset Catalog items and API searches "
+    "this worker reads.\n"
+    "- [Earth Search by Element 84](https://element84.com/earth-search/): the public STAC API whose "
+    "`sentinel-2-l2a` Cloud-Optimized GeoTIFFs the optical examples use.\n"
+    "- [Sentinel-2 processing (SentiWiki)](https://sentiwiki.copernicus.eu/web/s2-processing): Level-2A "
+    "surface reflectance and the Scene Classification (SCL) codes used for cloud masking.\n"
+    "- [Sentinel-1 RTC on Microsoft Planetary Computer]"
+    "(https://planetarycomputer.microsoft.com/dataset/sentinel-1-rtc): "
+    "the radiometrically terrain-corrected radar collection the `sentinel-1-rtc` default names.\n"
+    "- [Rasterio](https://rasterio.readthedocs.io/): the GDAL-based raster library used to read and align "
+    "assets."
+)
+
+
 def keywords_array(keywords: str) -> str:
     """Turn ``"a, b, c"`` into the JSON array string ``vgi.keywords`` requires."""
     return json.dumps([k.strip() for k in keywords.split(",") if k.strip()])
