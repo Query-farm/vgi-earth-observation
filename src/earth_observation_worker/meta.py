@@ -28,9 +28,6 @@ SCHEMA_CATEGORIES = [
         "title": "GIS Analysis",
         "description": "Spatial analysis over query results and geospatial assets.",
     },
-    {"name": "text", "title": "Text", "description": "Functions that build or transform strings."},
-    {"name": "generators", "title": "Generators", "description": "Table functions that generate rows."},
-    {"name": "api", "title": "REST APIs", "description": "Table functions that read from HTTP APIs."},
 ]
 
 
@@ -57,100 +54,35 @@ def column(name: str, type_: pa.DataType, comment: str, *, nullable: bool = True
     return pa.field(name, type_, nullable=nullable, metadata={b"comment": comment.encode()})
 
 
-CATALOG_DOC_LLM = (
-    "An example VGI worker generated from the Query.Farm starter template. It shows the three "
-    "shapes most workers need: a vectorized scalar function with an overload, a deterministic "
-    "table function with a named default argument, and a table function that pages through a REST "
-    "API with retries and an optional bearer token taken from a DuckDB secret or an environment "
-    "variable. Replace them with your own functions; keep the metadata complete so agents can "
-    "discover and call them."
-)
-
-CATALOG_DOC_MD = (
-    "# VGI earth_observation worker\n\n"
-    "**An example [VGI](https://query.farm/vgi) worker that brings custom functions into DuckDB "
-    "SQL.** It was generated from the Query.Farm starter template and is meant to be renamed and "
-    "rewritten: every function here demonstrates one pattern you will reuse, from vectorized "
-    "scalars and streaming table functions to a REST API reader that retries politely and reads "
-    "a bearer token from a DuckDB secret or the environment.\n\n"
-    "The worker speaks Apache Arrow to DuckDB over stdin/stdout, a Unix socket, or HTTP, so the "
-    "same code runs as a local subprocess or a hosted service. See the "
-    "[VGI documentation](https://query.farm/vgi/docs/) to learn more."
-)
-
-SCHEMA_DOC_LLM = (
-    "The `examples` schema holds the starter template's example functions, one per common worker "
-    "pattern. `greet(name)` and `greet(name, style)` are vectorized scalars: use them inside a "
-    "projection or predicate, one result per row; `style` is a constant that must be 'casual' or "
-    "'formal'. `sequence_table(count, step := 1)` is a deterministic table function that returns "
-    "`count` rows of `(n, squared)`; use it for demos, tests, and as a template for generators. "
-    "`fetch_items(base_url, page_size := 100)` reads every item from a paginated JSON REST API as "
-    "`(id, name, category, price)` rows, streaming one page per batch, retrying rate-limited "
-    "requests, and authenticating with a `earth_observation_api` DuckDB secret or the `EARTH_OBSERVATION_API_TOKEN` "
-    "environment variable. Scalars cannot take named arguments; table functions can."
-)
-
-SCHEMA_DOC_MD = (
-    "## examples\n\n"
-    "The starter template's example functions, one per common worker pattern.\n\n"
-    "- **Scalars** answer one question per row and slot into a projection or predicate.\n"
-    "- **Table functions** return sets of rows, streamed to DuckDB in Arrow batches.\n"
-    "- **REST readers** page through an HTTP API and authenticate with a DuckDB secret."
-)
-
 AGENT_TEST_TASKS = [
-    {"name": "formal_greeting", "prompt": "Using the earth_observation worker, greet the name 'Grace' formally."},
     {
-        "name": "sum_of_squares",
-        "prompt": "Using the earth_observation worker, what is the sum of the squared column for the first 10 rows "
-        "of the sequence with the default step?",
+        "name": "gis_sample_parcels",
+        "prompt": "List the bundled parcel IDs. Use the bundled synthetic inputs and return the "
+        "columns and ordering shown in its catalog example.",
     },
     {
-        "name": "stepped_sequence",
-        "prompt": "List the n values of a 4-row sequence that steps by 5, in ascending order.",
+        "name": "gis_parcel_series",
+        "prompt": "Find vegetation declines in two synthetic parcels. Use the bundled synthetic "
+        "inputs and return the columns and ordering shown in its catalog example.",
     },
     {
-        "name": "items_per_category",
-        "prompt": (
-            "The items API is running at https://vgi-starter-api.query-farm.services/v1. "
-            "How many items does it have in each category?"
-        ),
+        "name": "gis_radar_series",
+        "prompt": "Inspect the synthetic VV radar history for field-a using the radar_series function. "
+        "Return observed_date, rounded mean_db and status, ordered by acquisition as in its catalog example.",
+    },
+    {
+        "name": "gis_optical_radar_drop",
+        "prompt": "Using the bundled synthetic parcels, which parcels have both an optical NDVI decline and a "
+        "VV radar backscatter drop of at least 5 dB between consecutive fully covered (status 'ok') "
+        "acquisitions on the same orbit track? Return two columns: parcel_id (VARCHAR) and "
+        "largest_vv_drop_db (DOUBLE, the largest such drop as a positive dB value rounded to 1 decimal), "
+        "ordered by parcel_id.",
     },
 ]
 
-AGENT_TEST_TASKS.extend(
-    [
-        {
-            "name": "gis_demo_input",
-            "prompt": "List the bundled parcel IDs. Use the bundled synthetic inputs and return the "
-            "columns and ordering shown in its catalog example.",
-        },
-        {
-            "name": "gis_parcel_series",
-            "prompt": "Find vegetation declines in two synthetic parcels. Use the bundled synthetic "
-            "inputs and return the columns and ordering shown in its catalog example.",
-        },
-        {
-            "name": "gis_radar_series",
-            "prompt": "Inspect the synthetic VV radar history for field-a using the radar_series function. "
-            "Return observed_date, rounded mean_db and status, ordered by acquisition as in its catalog example.",
-        },
-        {
-            "name": "gis_optical_radar_drop",
-            "prompt": "Using the bundled synthetic parcels, which parcels have both an optical NDVI decline and a "
-            "VV radar backscatter drop of at least 5 dB between consecutive fully covered (status 'ok') "
-            "acquisitions on the same orbit track? Return two columns: parcel_id (VARCHAR) and "
-            "largest_vv_drop_db (DOUBLE, the largest such drop as a positive dB value rounded to 1 decimal), "
-            "ordered by parcel_id.",
-        },
-    ]
-)
-
 CATALOG_TAGS = {
     "vgi.title": "Earth Observation Time Series",
-    "vgi.subtitle": "Example DuckDB functions to rename and replace: a scalar, a table function and a REST API reader.",
-    "vgi.doc_llm": CATALOG_DOC_LLM,
-    "vgi.doc_md": CATALOG_DOC_MD,
+    # vgi.subtitle, vgi.doc_llm and vgi.doc_md are set in worker.py from the GIS descriptions.
     "vgi.source_url": SOURCE_URL,
     "vgi.icon_url": "https://query.farm/media-kit/products/vgi/vgi-logo.png",
     "vgi.license": "0BSD",

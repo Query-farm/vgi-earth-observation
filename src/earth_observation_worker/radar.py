@@ -252,18 +252,18 @@ def radar_series(rows: list[dict[str, Any]], scenes: list[dict[str, Any]], args:
 RADAR_SQL = (
     "SELECT observed_at::DATE AS observed_date, round(mean_db, 1), status FROM "
     "earth_observation.main.radar_series((SELECT parcel_id AS region_id, geometry_wkb "
-    "FROM earth_observation.main.demo_input WHERE parcel_id='field-a'), polarizations := 'vv') "
+    "FROM earth_observation.main.sample_parcels WHERE parcel_id='field-a'), polarizations := 'vv') "
     "ORDER BY observed_at"
 )
 
 # Composed: radar follow-up restricted to parcels whose optical history shows a decline.
 RADAR_FOLLOWUP_SQL = (
     "WITH declined AS (SELECT DISTINCT parcel_id FROM earth_observation.main.parcel_series("
-    "(SELECT parcel_id, geometry_wkb FROM earth_observation.main.demo_input)) WHERE decline) "
+    "(SELECT parcel_id, geometry_wkb FROM earth_observation.main.sample_parcels)) WHERE decline) "
     "SELECT region_id, observed_at::DATE AS observed_date, relative_orbit, "
     "round(max(mean_db) FILTER (WHERE polarization = 'VV') - max(mean_db) FILTER (WHERE polarization = 'VH'), 1) "
     "AS vv_minus_vh_db FROM earth_observation.main.radar_series((SELECT parcel_id AS region_id, geometry_wkb "
-    "FROM earth_observation.main.demo_input WHERE parcel_id IN (SELECT parcel_id FROM declined))) "
+    "FROM earth_observation.main.sample_parcels WHERE parcel_id IN (SELECT parcel_id FROM declined))) "
     "WHERE status = 'ok' GROUP BY region_id, observed_at, relative_orbit ORDER BY region_id, observed_at"
 )
 RADAR_FOLLOWUP_DESCRIPTION = (

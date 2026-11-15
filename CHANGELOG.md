@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.2.0 (unreleased)
+
+- Removed the starter template's demo schema (`examples.greet`/`fetch_items`/`sequence_table`),
+  `demo_input` and the placeholder `earth_observation_api` secret type. The worker now
+  exposes only its `main` schema and needs no credentials.
+- The bundled synthetic parcels are now `main.sample_parcels` (formerly `main.demo_input`);
+  same two rows and columns.
+- Dropped the starter's SDK recipe scripts (`examples/*.py`), mock REST API and their tests.
+
 ## 0.1.0 (2026-11-14)
 
 First release.

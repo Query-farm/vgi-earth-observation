@@ -6,16 +6,16 @@ require-env EARTH_OBSERVATION_WORKER
 statement ok
 ATTACH 'earth_observation' (TYPE vgi, LOCATION '{EARTH_OBSERVATION_WORKER}');
 
-# Demo parcels on bundled synthetic data
+# Sample parcels on bundled synthetic data
 query T
-SELECT parcel_id FROM earth_observation.main.demo_input ORDER BY parcel_id;
+SELECT parcel_id FROM earth_observation.main.sample_parcels ORDER BY parcel_id;
 ----
 field-a
 field-b
 
 # Parcel satellite history on bundled synthetic data
 query TTT
-SELECT parcel_id, round(mean_index, 2), decline FROM earth_observation.main.parcel_series((SELECT * FROM earth_observation.main.demo_input)) ORDER BY parcel_id, observed_at;
+SELECT parcel_id, round(mean_index, 2), decline FROM earth_observation.main.parcel_series((SELECT * FROM earth_observation.main.sample_parcels)) ORDER BY parcel_id, observed_at;
 ----
 field-a	0.6	NULL
 field-a	0.0	true
@@ -24,13 +24,13 @@ field-b	0.0	true
 
 # Empty parcel relation
 query T
-SELECT count(*) FROM earth_observation.main.parcel_series((SELECT * FROM earth_observation.main.demo_input WHERE false));
+SELECT count(*) FROM earth_observation.main.parcel_series((SELECT * FROM earth_observation.main.sample_parcels WHERE false));
 ----
 0
 
 # Multiple input batches without invented observations
 query TTT
-SELECT count(*), count(mean_index), min(status) FROM earth_observation.main.parcel_series((SELECT i::VARCHAR parcel_id, geometry_wkb FROM earth_observation.main.demo_input CROSS JOIN range(2501) t(i) WHERE parcel_id='field-a'), end_date := '2026-01-02');
+SELECT count(*), count(mean_index), min(status) FROM earth_observation.main.parcel_series((SELECT i::VARCHAR parcel_id, geometry_wkb FROM earth_observation.main.sample_parcels CROSS JOIN range(2501) t(i) WHERE parcel_id='field-a'), end_date := '2026-01-02');
 ----
 2501	0	no_scenes
 
@@ -38,7 +38,7 @@ SELECT count(*), count(mean_index), min(status) FROM earth_observation.main.parc
 query TTTT
 WITH owners(parcel_id, owner_name) AS (VALUES ('field-a', 'North Farm'), ('field-b', 'River Farm')),
 weather(month_start, rain_mm) AS (VALUES (DATE '2026-07-01', 10.0)),
-series AS (SELECT * FROM earth_observation.main.parcel_series((SELECT * FROM earth_observation.main.demo_input)))
+series AS (SELECT * FROM earth_observation.main.parcel_series((SELECT * FROM earth_observation.main.sample_parcels)))
 SELECT s.parcel_id, o.owner_name, round(s.delta_index, 2) AS delta_ndvi, w.rain_mm::DOUBLE AS rain_mm
 FROM series s JOIN owners o USING(parcel_id)
 JOIN weather w ON s.observed_at::DATE = w.month_start
@@ -54,30 +54,30 @@ Missing input columns
 
 # Constant controls must not accept infinity.
 statement error
-SELECT * FROM earth_observation.main.parcel_series((SELECT * FROM earth_observation.main.demo_input), max_change_gap_days := 'Infinity'::DOUBLE);
+SELECT * FROM earth_observation.main.parcel_series((SELECT * FROM earth_observation.main.sample_parcels), max_change_gap_days := 'Infinity'::DOUBLE);
 ----
 finite
 
 statement error
-SELECT * FROM earth_observation.main.parcel_series((SELECT * FROM earth_observation.main.demo_input), clear_scl_classes := '4,99');
+SELECT * FROM earth_observation.main.parcel_series((SELECT * FROM earth_observation.main.sample_parcels), clear_scl_classes := '4,99');
 ----
 SCL codes
 
 statement error
-SELECT * FROM earth_observation.main.parcel_series((SELECT * FROM earth_observation.main.demo_input), start_date := '2027-01-01', end_date := '2026-01-01');
+SELECT * FROM earth_observation.main.parcel_series((SELECT * FROM earth_observation.main.sample_parcels), start_date := '2027-01-01', end_date := '2026-01-01');
 ----
 start_date
 
 # Composed: optical declines joined to the VV change per orbit track (parcel_series + radar_series).
 query TIRITR
-WITH optical AS (SELECT parcel_id, count(*) FILTER (WHERE decline) AS ndvi_declines, min(delta_index) AS worst_ndvi_change FROM earth_observation.main.parcel_series((SELECT parcel_id, geometry_wkb FROM earth_observation.main.demo_input)) GROUP BY parcel_id), radar AS (SELECT region_id, relative_orbit, orbit_state, arg_max(mean_db, observed_at) - arg_min(mean_db, observed_at) AS vv_change_db FROM earth_observation.main.radar_series((SELECT parcel_id AS region_id, geometry_wkb FROM earth_observation.main.demo_input), polarizations := 'vv') WHERE status = 'ok' GROUP BY region_id, relative_orbit, orbit_state) SELECT o.parcel_id, o.ndvi_declines, round(o.worst_ndvi_change, 2) AS worst_ndvi_change, r.relative_orbit, r.orbit_state, round(r.vv_change_db, 1) AS vv_change_db FROM optical AS o JOIN radar AS r ON r.region_id = o.parcel_id ORDER BY o.parcel_id, r.relative_orbit, r.orbit_state;
+WITH optical AS (SELECT parcel_id, count(*) FILTER (WHERE decline) AS ndvi_declines, min(delta_index) AS worst_ndvi_change FROM earth_observation.main.parcel_series((SELECT parcel_id, geometry_wkb FROM earth_observation.main.sample_parcels)) GROUP BY parcel_id), radar AS (SELECT region_id, relative_orbit, orbit_state, arg_max(mean_db, observed_at) - arg_min(mean_db, observed_at) AS vv_change_db FROM earth_observation.main.radar_series((SELECT parcel_id AS region_id, geometry_wkb FROM earth_observation.main.sample_parcels), polarizations := 'vv') WHERE status = 'ok' GROUP BY region_id, relative_orbit, orbit_state) SELECT o.parcel_id, o.ndvi_declines, round(o.worst_ndvi_change, 2) AS worst_ndvi_change, r.relative_orbit, r.orbit_state, round(r.vv_change_db, 1) AS vv_change_db FROM optical AS o JOIN radar AS r ON r.region_id = o.parcel_id ORDER BY o.parcel_id, r.relative_orbit, r.orbit_state;
 ----
 field-a	1	-0.6	77	ascending	-10.0
 field-b	1	-0.6	77	ascending	-10.0
 
 # Composed: radar follow-up restricted to parcels with an optical decline.
 query TTIR
-WITH declined AS (SELECT DISTINCT parcel_id FROM earth_observation.main.parcel_series((SELECT parcel_id, geometry_wkb FROM earth_observation.main.demo_input)) WHERE decline) SELECT region_id, observed_at::DATE AS observed_date, relative_orbit, round(max(mean_db) FILTER (WHERE polarization = 'VV') - max(mean_db) FILTER (WHERE polarization = 'VH'), 1) AS vv_minus_vh_db FROM earth_observation.main.radar_series((SELECT parcel_id AS region_id, geometry_wkb FROM earth_observation.main.demo_input WHERE parcel_id IN (SELECT parcel_id FROM declined))) WHERE status = 'ok' GROUP BY region_id, observed_at, relative_orbit ORDER BY region_id, observed_at;
+WITH declined AS (SELECT DISTINCT parcel_id FROM earth_observation.main.parcel_series((SELECT parcel_id, geometry_wkb FROM earth_observation.main.sample_parcels)) WHERE decline) SELECT region_id, observed_at::DATE AS observed_date, relative_orbit, round(max(mean_db) FILTER (WHERE polarization = 'VV') - max(mean_db) FILTER (WHERE polarization = 'VH'), 1) AS vv_minus_vh_db FROM earth_observation.main.radar_series((SELECT parcel_id AS region_id, geometry_wkb FROM earth_observation.main.sample_parcels WHERE parcel_id IN (SELECT parcel_id FROM declined))) WHERE status = 'ok' GROUP BY region_id, observed_at, relative_orbit ORDER BY region_id, observed_at;
 ----
 field-a	2025-08-10	77	10.0
 field-a	2025-08-22	77	10.0

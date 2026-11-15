@@ -26,7 +26,7 @@ ATTACH 'earth_observation' (TYPE vgi,
 
 ## Analysis contract
 
-`parcel_series((SELECT parcel_id, geometry_wkb FROM parcels), ...)` returns one row per parcel and observation or month. It searches public STAC APIs or reads static STAC ItemCollections, aligns bands to a common grid, masks Sentinel-2 SCL classes, computes NDVI/NDWI/NBR, forms pixel-median monthly composites, and compares adequately observed periods. `demo_input` is a table of two parcel polygons.
+`parcel_series((SELECT parcel_id, geometry_wkb FROM parcels), ...)` returns one row per parcel and observation or month. It searches public STAC APIs or reads static STAC ItemCollections, aligns bands to a common grid, masks Sentinel-2 SCL classes, computes NDVI/NDWI/NBR, forms pixel-median monthly composites, and compares adequately observed periods. `sample_parcels` is a table of two parcel polygons.
 
 **Acceptance:** June NDVI is 0.6 despite a fully cloudy second scene; July is 0.0, producing a −0.6 decline. One parcel has 75% June coverage. The demo joins declines to owner names and monthly rain.
 
@@ -47,7 +47,7 @@ satellite, repeat orbit and polarization. Run the offline example after attachin
 SELECT observed_at::DATE, polarization, round(mean_db, 1), status
 FROM earth_observation.main.radar_series((
     SELECT parcel_id AS region_id, geometry_wkb
-    FROM earth_observation.main.demo_input WHERE parcel_id = 'field-a'
+    FROM earth_observation.main.sample_parcels WHERE parcel_id = 'field-a'
 ))
 ORDER BY observed_at, polarization;
 ```
@@ -119,13 +119,13 @@ WITH optical AS (
     SELECT parcel_id, count(*) FILTER (WHERE decline) AS ndvi_declines,
            min(delta_index) AS worst_ndvi_change
     FROM earth_observation.main.parcel_series(
-        (SELECT parcel_id, geometry_wkb FROM earth_observation.main.demo_input))
+        (SELECT parcel_id, geometry_wkb FROM earth_observation.main.sample_parcels))
     GROUP BY parcel_id),
 radar AS (
     SELECT region_id, relative_orbit, orbit_state,
            arg_max(mean_db, observed_at) - arg_min(mean_db, observed_at) AS vv_change_db
     FROM earth_observation.main.radar_series(
-        (SELECT parcel_id AS region_id, geometry_wkb FROM earth_observation.main.demo_input),
+        (SELECT parcel_id AS region_id, geometry_wkb FROM earth_observation.main.sample_parcels),
         polarizations := 'vv')
     WHERE status = 'ok'
     GROUP BY region_id, relative_orbit, orbit_state)
@@ -161,4 +161,4 @@ Source and issues are hosted in [Query-farm/vgi-earth-observation](https://githu
 
 ## Executed notebooks
 
-[Three SQL-first notebooks](notebooks/README.md) explore optical coverage and eligibility, radar acquisition dates versus usable measurements, and a separately labeled starter-API inventory report. They use the public v0.1.0 release, synthetic inputs, SVG figures and direct Open in Colab links.
+[Two SQL-first notebooks](notebooks/README.md) explore optical coverage and eligibility, and radar acquisition dates versus usable measurements. They use the public v0.1.0 release, synthetic inputs, SVG figures and direct Open in Colab links.

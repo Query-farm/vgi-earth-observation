@@ -1,6 +1,6 @@
 # Earth Observation examples
 
-Three independent notebooks use the public **v0.1.0** worker and the shared
+Two independent notebooks use the public **v0.1.0** worker and the shared
 Query.Farm example tools. Each has saved SQL results, SVG figures and a parameter
 experiment. Inputs are explicitly synthetic; no provider account or imagery
 credentials are needed.
@@ -9,14 +9,10 @@ credentials are needed.
 | --- | --- | --- |
 | [Coverage controls comparisons](01_coverage_controls_comparisons.ipynb) | Do unchanged optical measurements remain eligible when the coverage threshold increases? | [Run](https://colab.research.google.com/github/Query-farm/vgi-earth-observation/blob/main/notebooks/01_coverage_controls_comparisons.ipynb) |
 | [Latest radar row versus latest measurement](02_latest_radar_row_is_not_latest_measurement.ipynb) | What should a report say when its newest radar acquisition has no usable pixels? | [Run](https://colab.research.google.com/github/Query-farm/vgi-earth-observation/blob/main/notebooks/02_latest_radar_row_is_not_latest_measurement.ipynb) |
-| [Paginated inventory report](03_paginated_inventory_report.ipynb) | Have all synthetic inventory pages arrived before a budget comparison and local report preview? | [Run](https://colab.research.google.com/github/Query-farm/vgi-earth-observation/blob/main/notebooks/03_paginated_inventory_report.ipynb) |
 
-The first two use the release's packaged TIFFs and polygon fixtures. Raster
-measurement runs inside the actual worker; SQL checks coverage, changes and grouping.
-The third demonstrates the separately named `examples` schema, a retained generic
-starter API/generator/formatter. It is not STAC or an optical/radar analysis service.
-Its local server serves six authored equipment prices, rejects credentials and
-records sanitized request evidence. Greeting outputs are strings, never messages.
+Both use the release's packaged TIFFs; the two synthetic parcel polygons are inline
+SQL `VALUES` (WKB) matching the worker's `sample_parcels` table. Raster measurement
+runs inside the actual worker; SQL checks coverage, changes and grouping.
 
 ## Run all
 
@@ -41,22 +37,18 @@ ATTACH 'earth_observation' (TYPE vgi,
 ```
 
 The release owns its dependency compatibility. No worker constraint file, local
-checkout or source build command appears in the examples. SQL credentials start
-empty; the starter fixture temporarily isolates and then restores
-`EARTH_OBSERVATION_API_TOKEN` without reading it into outputs.
+checkout or source build command appears in the examples. No credentials are needed.
 
 ## Save experiments separately
 
 ```sh
 uv run --locked vgi-notebooks 01_coverage_controls_comparisons.ipynb --parameters '{"MIN_COVERAGE":0.9}' --output-dir artifacts/coverage-90 --timeout 300
 uv run --locked vgi-notebooks 02_latest_radar_row_is_not_latest_measurement.ipynb --parameters '{"END_DATE":"2025-08-22T00:00:00Z"}' --output-dir artifacts/august-window --timeout 300
-uv run --locked vgi-notebooks 03_paginated_inventory_report.ipynb --parameters '{"BUDGET_USD":75}' --output-dir artifacts/budget-75 --timeout 300
 ```
 
 Optical reference measurements stay fixed while field-a loses its earlier eligible
 baseline. The shorter radar window excludes unavailable September rows while keeping
-all shared measurements and August power changes fixed. A larger inventory budget
-changes affordability while preserving prices, pages and the complete scenario grid.
+all shared measurements and August power changes fixed.
 
 ## Boundaries and provenance
 
@@ -71,6 +63,6 @@ These synthetic checks do not validate a sensor or a real-world causal explanati
 Figures use SVG MIME in Jupyter/Colab and content-addressed SVG assets for GitHub.
 GitHub does not fold executable cells, so setup remains concise and ATTACH visible.
 The shared [standard and runner](https://github.com/Query-farm/vgi-example-notebooks)
-replace copied local tooling. `coverage.json` records all six logical public names,
-including both greeting overloads and the demo table/function alias. Local testing
+replace copied local tooling. `coverage.json` records the public names the notebooks
+exercise (`parcel_series`, `radar_series`). Local testing
 with preloaded libraries checks compatibility; it is not a manual hosted-Colab run.

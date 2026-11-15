@@ -7,25 +7,25 @@ statement ok
 ATTACH 'earth_observation' (TYPE vgi, LOCATION '{EARTH_OBSERVATION_WORKER}');
 
 query TTT
-SELECT observed_at::DATE, round(mean_db, 1), status FROM earth_observation.main.radar_series((SELECT parcel_id AS region_id, geometry_wkb FROM earth_observation.main.demo_input WHERE parcel_id='field-a'), polarizations := 'vv') ORDER BY observed_at;
+SELECT observed_at::DATE, round(mean_db, 1), status FROM earth_observation.main.radar_series((SELECT parcel_id AS region_id, geometry_wkb FROM earth_observation.main.sample_parcels WHERE parcel_id='field-a'), polarizations := 'vv') ORDER BY observed_at;
 ----
 2025-08-10	-10.0	ok
 2025-08-22	-20.0	ok
 2025-09-03	NULL	insufficient_coverage
 
 query TTT
-SELECT polarization, count(mean_db), round(max(mean_db)-min(mean_db), 1) FROM earth_observation.main.radar_series((SELECT parcel_id AS region_id, geometry_wkb FROM earth_observation.main.demo_input WHERE parcel_id='field-a')) GROUP BY polarization ORDER BY polarization;
+SELECT polarization, count(mean_db), round(max(mean_db)-min(mean_db), 1) FROM earth_observation.main.radar_series((SELECT parcel_id AS region_id, geometry_wkb FROM earth_observation.main.sample_parcels WHERE parcel_id='field-a')) GROUP BY polarization ORDER BY polarization;
 ----
 VH	2	10.0
 VV	2	10.0
 
 query I
-SELECT count(*) FROM earth_observation.main.radar_series((SELECT parcel_id AS region_id, geometry_wkb FROM earth_observation.main.demo_input WHERE false));
+SELECT count(*) FROM earth_observation.main.radar_series((SELECT parcel_id AS region_id, geometry_wkb FROM earth_observation.main.sample_parcels WHERE false));
 ----
 0
 
 query IIT
-SELECT count(*), count(mean_db), min(status) FROM earth_observation.main.radar_series((SELECT i::VARCHAR AS region_id, geometry_wkb FROM earth_observation.main.demo_input CROSS JOIN range(2501) t(i) WHERE parcel_id='field-a'), end_date := '2025-01-02');
+SELECT count(*), count(mean_db), min(status) FROM earth_observation.main.radar_series((SELECT i::VARCHAR AS region_id, geometry_wkb FROM earth_observation.main.sample_parcels CROSS JOIN range(2501) t(i) WHERE parcel_id='field-a'), end_date := '2025-01-02');
 ----
 2501	0	no_scenes
 
@@ -36,11 +36,11 @@ Missing input columns
 
 # One input batch expands past 4096 rows without violating the transport contract.
 query II
-SELECT count(*), count(mean_db) FROM earth_observation.main.radar_series((SELECT i::VARCHAR AS region_id, geometry_wkb FROM earth_observation.main.demo_input CROSS JOIN range(700) t(i) WHERE parcel_id='field-a'));
+SELECT count(*), count(mean_db) FROM earth_observation.main.radar_series((SELECT i::VARCHAR AS region_id, geometry_wkb FROM earth_observation.main.sample_parcels CROSS JOIN range(700) t(i) WHERE parcel_id='field-a'));
 ----
 4200	2800
 
 statement error
-SELECT * FROM earth_observation.main.radar_series((SELECT parcel_id AS region_id, geometry_wkb FROM earth_observation.main.demo_input), polarizations := 'hh');
+SELECT * FROM earth_observation.main.radar_series((SELECT parcel_id AS region_id, geometry_wkb FROM earth_observation.main.sample_parcels), polarizations := 'hh');
 ----
 polarizations

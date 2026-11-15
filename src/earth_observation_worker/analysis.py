@@ -624,18 +624,18 @@ class SeriesArgs:
 SERIES_SQL = (
     "SELECT parcel_id, round(mean_index, 2), decline FROM "
     "earth_observation.main.parcel_series((SELECT * FROM "
-    "earth_observation.main.demo_input)) ORDER BY parcel_id, observed_at"
+    "earth_observation.main.sample_parcels)) ORDER BY parcel_id, observed_at"
 )
 
 # Composed: optical decline counts joined to the VV backscatter change on each viewing track.
 OPTICAL_RADAR_SQL = (
     "WITH optical AS (SELECT parcel_id, count(*) FILTER (WHERE decline) AS ndvi_declines, "
     "min(delta_index) AS worst_ndvi_change FROM earth_observation.main.parcel_series("
-    "(SELECT parcel_id, geometry_wkb FROM earth_observation.main.demo_input)) GROUP BY parcel_id), "
+    "(SELECT parcel_id, geometry_wkb FROM earth_observation.main.sample_parcels)) GROUP BY parcel_id), "
     "radar AS (SELECT region_id, relative_orbit, orbit_state, "
     "arg_max(mean_db, observed_at) - arg_min(mean_db, observed_at) AS vv_change_db "
     "FROM earth_observation.main.radar_series((SELECT parcel_id AS region_id, geometry_wkb "
-    "FROM earth_observation.main.demo_input), polarizations := 'vv') WHERE status = 'ok' "
+    "FROM earth_observation.main.sample_parcels), polarizations := 'vv') WHERE status = 'ok' "
     "GROUP BY region_id, relative_orbit, orbit_state) "
     "SELECT o.parcel_id, o.ndvi_declines, round(o.worst_ndvi_change, 2) AS worst_ndvi_change, "
     "r.relative_orbit, r.orbit_state, round(r.vv_change_db, 1) AS vv_change_db "
@@ -726,23 +726,23 @@ class ParcelSeries(TableInOutGenerator[SeriesArgs]):
 
 
 @dataclass(slots=True, frozen=True, kw_only=True)
-class DemoArgs:
+class SampleParcelsArgs:
     """No arguments: use the bundled synthetic parcels."""
 
 
 @dataclass(kw_only=True)
 class Cursor(ArrowSerializableDataclass):
-    """Whether the demo input has been sent."""
+    """Whether the sample parcels have been sent."""
 
     done: bool = False
 
 
-DEMO_SQL = "SELECT parcel_id FROM earth_observation.main.demo_input ORDER BY parcel_id"
+SAMPLE_PARCELS_SQL = "SELECT parcel_id FROM earth_observation.main.sample_parcels ORDER BY parcel_id"
 
 
 @init_single_worker
 @bind_fixed_schema
-class DemoInput(TableFunctionGenerator[DemoArgs, Cursor]):
+class SampleParcels(TableFunctionGenerator[SampleParcelsArgs, Cursor]):
     """Return polygons covering the offline synthetic satellite scenes."""
 
     FIXED_SCHEMA: ClassVar[pa.Schema] = INPUT
@@ -750,25 +750,25 @@ class DemoInput(TableFunctionGenerator[DemoArgs, Cursor]):
     class Meta:
         """Synthetic parcel metadata."""
 
-        name = "demo_input"
-        description = "Two synthetic agricultural parcels for the offline satellite demo"
+        name = "sample_parcels"
+        description = "Two synthetic agricultural parcels matching the bundled offline satellite scenes"
         tags = metadata(
-            "Demo parcels",
+            "Synthetic test parcels",
             "Two polygons in EPSG:32618 over demo://scenes.json. These are synthetic test "
             "parcels with known cloud masks and reflectances, not observations of real farms.",
             INPUT,
-            DEMO_SQL,
+            SAMPLE_PARCELS_SQL,
             [["field-a"], ["field-b"]],
         )
-        examples = example(DEMO_SQL, "List the bundled parcel IDs")
+        examples = example(SAMPLE_PARCELS_SQL, "List the bundled parcel IDs")
 
     @classmethod
-    def initial_state(cls, params: ProcessParams[DemoArgs]) -> Cursor:
-        """Start before the demo rows."""
+    def initial_state(cls, params: ProcessParams[SampleParcelsArgs]) -> Cursor:
+        """Start before the sample rows."""
         return Cursor()
 
     @classmethod
-    def process(cls, params: ProcessParams[DemoArgs], state: Cursor, out: OutputCollector) -> None:
+    def process(cls, params: ProcessParams[SampleParcelsArgs], state: Cursor, out: OutputCollector) -> None:
         """Send both polygons once."""
         if state.done:
             out.finish()
@@ -785,17 +785,17 @@ class DemoInput(TableFunctionGenerator[DemoArgs, Cursor]):
         state.done = True
 
 
-GIS_FUNCTIONS: list[type[Any]] = [DemoInput, ParcelSeries]
+GIS_FUNCTIONS: list[type[Any]] = [SampleParcels, ParcelSeries]
 
 GIS_TABLES = [
     Table(
-        name="demo_input",
-        function=DemoInput,
-        comment=DemoInput.Meta.description,
+        name="sample_parcels",
+        function=SampleParcels,
+        comment=SampleParcels.Meta.description,
         constraints=(
             constraint_record(
                 ["main"],
-                "demo_input",
+                "sample_parcels",
                 "id_not_null",
                 "NOT_NULL",
                 [["parcel_id"]],
@@ -804,8 +804,8 @@ GIS_TABLES = [
             ),
             constraint_record(
                 ["main"],
-                "demo_input",
-                "demo_pk",
+                "sample_parcels",
+                "sample_parcels_pk",
                 "PRIMARY_KEY",
                 [["parcel_id"]],
                 enforcement="ENFORCED",
@@ -813,12 +813,12 @@ GIS_TABLES = [
             ),
         ),
         tags={
-            **DemoInput.Meta.tags,
+            **SampleParcels.Meta.tags,
             "domain": "geospatial",
             "vgi.example_queries": json.dumps(
-                [{"description": ex.description, "sql": ex.sql} for ex in DemoInput.Meta.examples]
+                [{"description": ex.description, "sql": ex.sql} for ex in SampleParcels.Meta.examples]
             ),
         },
-        column_comments={f.name: (f.metadata or {}).get(b"comment", b"").decode() for f in DemoInput.FIXED_SCHEMA},
+        column_comments={f.name: (f.metadata or {}).get(b"comment", b"").decode() for f in SampleParcels.FIXED_SCHEMA},
     )
 ]
