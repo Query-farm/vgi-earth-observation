@@ -1,6 +1,6 @@
 [project]
 name = "vgi-earth-observation-worker"
-version = "0.2.1"
+version = "0.2.2"
 description = "Python GIS earth observation analysis exposed as VGI SQL functions."
 readme = "README.md"
 license = "0BSD"
@@ -14,7 +14,7 @@ dependencies = [
     "httpx>=0.28,<1",
     # [http] adds the HTTP transport (`--http`) used by Docker deploys.
     # SDK bumps go through the template (minor bumps can raise the protocol).
-    "vgi-python[http]>=0.52.0,<0.53",
+    "vgi-python[http]>=0.52.2,<0.53",
 ]
 
 [project.scripts]

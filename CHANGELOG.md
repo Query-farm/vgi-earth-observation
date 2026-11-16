@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.2 (2026-11-16)
+
+- Bump vgi-python to 0.52.2.
+
 ## 0.2.1
 
 - Docs link to upstream sources: the catalog `vgi.doc_md` gains a Sources and references section linking the STAC specification, Earth Search, the Sentinel-2 processing notes (SCL codes), the Sentinel-1 RTC collection on Planetary Computer and Rasterio (VGI183).
