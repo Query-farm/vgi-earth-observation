@@ -174,11 +174,11 @@ def request_page(
                     except ValueError:
                         try:
                             delay = (parsedate_to_datetime(retry_after) - datetime.now(UTC)).total_seconds()
-                        except (TypeError, ValueError, OverflowError):
+                        except TypeError, ValueError, OverflowError:
                             delay = 0.5 * 2**attempt
                     if not math.isfinite(delay) or delay > 30:
                         raise ValueError(f"STAC HTTP {response.status_code}: Retry-After exceeds 30s; retry later")
-        except (httpx.TimeoutException, httpx.NetworkError):
+        except httpx.TimeoutException, httpx.NetworkError:
             if attempt == 4:
                 raise
         time.sleep(max(0.0, delay))

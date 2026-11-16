@@ -4,7 +4,7 @@ Independent Python VGI worker: query geospatial analysis from SQL and join the r
 
 ## Run it
 
-Requires Python 3.13+ and [uv](https://docs.astral.sh/uv/).
+Requires Python 3.14+ and [uv](https://docs.astral.sh/uv/).
 
 ```sh
 git clone https://github.com/Query-farm/vgi-earth-observation.git
@@ -145,7 +145,7 @@ years, so this is a demonstration of the join, not evidence of one event.
 - Real SQL across stdio, launch and HTTP: [test/sql/gis.test](test/sql/gis.test), run by `make check` alongside the preserved SDK regression suite.
 - Stock DuckDB contract: [vgi-worker.json](vgi-worker.json), executed by `make verify-stock`.
 - Reproduce local checks with `make check`; generated logs and JSON under `validation/` are not source-controlled.
-- Worker language: Python, pinned locally to 3.13. SDK: `vgi-python 0.51.1` with the starter's `>=0.51.1,<0.52` compatibility bound retained.
+- Worker language: Python, pinned locally to 3.14. SDK: `vgi-python 0.51.1` with the starter's `>=0.51.1,<0.52` compatibility bound retained.
 - Starter: [Query-farm/vgi-starter-python](https://github.com/Query-farm/vgi-starter-python), commit `9cca9105474d6e0052b8e343c8ea21f3d1a7503c`, template 1.3.0.
 - Stock engine: DuckDB 2.0.0, signed VGI extension `e75482339d` from `query_farm`. The starter integration runner is separately pinned to `haybarn-unittest 2.0.0rc11`; it is not the stock DuckDB check.
 
