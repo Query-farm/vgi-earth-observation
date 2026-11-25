@@ -19,10 +19,12 @@ To attach a tagged release without cloning, let uv fetch it:
 
 ```sql
 ATTACH 'earth_observation' (TYPE vgi,
-  LOCATION 'uvx --from git+https://github.com/Query-farm/vgi-earth-observation@v0.2.2 vgi-earth-observation-worker');
+  LOCATION 'uvx --from git+https://github.com/Query-farm/vgi-earth-observation@v0.3.0 vgi-earth-observation-worker');
 ```
 
 `make demo` runs [demo.sql](demo.sql) in stock DuckDB 2.0.0. Demo datasets ship inside the wheel; no data credentials are required. The first run downloads dependencies and signed SQL extensions. `make verify-stock` asserts every expected result in [vgi-worker.json](vgi-worker.json), including empty inputs, joins and multiple batches.
+
+vgi-earth-observation 0.3.0 speaks VGI protocol 3.4, so it needs Haybarn 2.0.1 or newer (Haybarn 2.0.0 loads a 3.3 `vgi` extension that cannot attach it).
 
 ## Analysis contract
 
@@ -147,7 +149,7 @@ years, so this is a demonstration of the join, not evidence of one event.
 - Reproduce local checks with `make check`; generated logs and JSON under `validation/` are not source-controlled.
 - Worker language: Python, pinned locally to 3.14. SDK: `vgi-python 0.51.1` with the starter's `>=0.51.1,<0.52` compatibility bound retained.
 - Starter: [Query-farm/vgi-starter-python](https://github.com/Query-farm/vgi-starter-python), commit `9cca9105474d6e0052b8e343c8ea21f3d1a7503c`, template 1.3.0.
-- Stock engine: DuckDB 2.0.0, signed VGI extension `e75482339d` from `query_farm`. The starter integration runner is separately pinned to `haybarn-unittest 2.0.0rc11`; it is not the stock DuckDB check.
+- Stock engine: DuckDB 2.0.0, signed VGI extension `e75482339d` from `query_farm`. The starter integration runner is separately pinned to `haybarn-unittest 2.0.1rc3`; it is not the stock DuckDB check.
 
 `make check` includes formatting, Ruff, strict mypy, docstring checks, unit tests, all three SQL transports, executed metadata examples and stock DuckDB assertions. `make lint-ai` is an optional agent evaluation and is not part of the completed checks. The `examples` schema preserves starter functions; GIS functions live in `main`. Tests use synthetic known-answer fixtures, not a claim of production accuracy on every dataset.
 
