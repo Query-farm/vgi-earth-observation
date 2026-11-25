@@ -4,6 +4,8 @@ name: Publish image
 # without publishing a container or deploying a service.
 
 on:
+  push:
+    tags: ['v*.*.*']
   workflow_dispatch:
 
 permissions:
